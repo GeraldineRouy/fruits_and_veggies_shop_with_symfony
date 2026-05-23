@@ -1,0 +1,9 @@
+.git
+.gitignore
+.env.local
+var/
+vendor/
+.dockerignore
+.gitkeep
+.gitattributes
+.idea/

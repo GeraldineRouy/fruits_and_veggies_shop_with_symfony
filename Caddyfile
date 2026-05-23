@@ -1,0 +1,25 @@
+{
+    frankenphp
+}
+
+:8000 {
+    root * /app/public
+    encode zstd br gzip
+
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        X-XSS-Protection "1; mode=block"
+    }
+
+    route /assets/* {
+        header Cache-Control "public, immutable, max-age=31536000"
+        file_server
+    }
+
+    php_server {
+        try_files {path} /index.php
+    }
+
+    file_server
+}

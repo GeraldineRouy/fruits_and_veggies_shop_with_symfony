@@ -4,11 +4,13 @@
 Site web e-commerce de vente de fruits et légumes frais destiné au public francophone de la région grenobloise. Projet pédagogique Symfony (MVC) avec gestion de catalogue, panier, commandes et utilisateurs.
 
 ## Stack technique
-- **Framework :** Symfony 7.4
-- **Base de données :** MySQL (LTS)
-- **PHP :** 8.x
-- **Frontend :** Twig + AssetMapper
-- **Docker :** Container PHP 8.x + container MySQL LTS
+- **Framework :** Symfony 8.0
+- **Base de données :** PostgreSQL 16
+- **PHP :** 8.4
+- **Frontend :** Twig + AssetMapper + Stimulus + Turbo
+- **Docker :** FrankenPHP + PostgreSQL 16 + Mailpit
+- **Messaging :** Symfony Messenger avec transport Doctrine
+- **Email :** Symfony Mailer via Mailpit (dev)
 - **Versioning :** Git avec dépôt distant
 
 ## Entités
@@ -93,13 +95,8 @@ Basé sur SessionInterface / RequestStack, dépend de MailService
 - Inscription avec validation par email
 
 ## Contraintes Docker
-- Container PHP 8.x
-- Container MySQL LTS
-- Migrations Symfony exécutées automatiquement au démarrage du container PHP
-- Configuration docker-compose à créer
-
-## Inconsistances résolues
-- Symfony 7.4 retenu (ni 5.2 ni 8.0)
-- MySQL LTS retenu (pas PostgreSQL)
-- Entité renommée **OrderLine** (pas OrderItem)
-- Relation Product → Category : ManyToMany confirmée
+- FrankenPHP (PHP 8.4)
+- PostgreSQL 16
+- Migrations Symfony exécutées automatiquement au démarrage du conteneur PHP
+- Mailpit pour les emails en développement
+- Configuration docker-compose existante avec `compose.yaml`

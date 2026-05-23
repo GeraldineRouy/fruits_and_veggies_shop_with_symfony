@@ -1,3 +1,18 @@
 body {
-    background-color: skyblue;
+    background-color: #f5f5f5;
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 2rem;
+    color: #333;
 }
+
+h1 {
+    color: #2e7d32;
+    font-size: 2rem;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #555;
+}
+
