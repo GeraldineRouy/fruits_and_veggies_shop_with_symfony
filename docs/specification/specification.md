@@ -33,7 +33,7 @@ Site web e-commerce de vente de fruits et légumes frais destiné au public fran
 - `name` (string, non null)
 - `description` (text, non null)
 - `image` (string, non null)
-- `price` (float, non null)
+- `price` (decimal, non null)
 - `categories` (relation ManyToMany vers Category)
 
 ### Order
@@ -44,7 +44,7 @@ Site web e-commerce de vente de fruits et légumes frais destiné au public fran
 ### OrderLine
 - `order` (relation ManyToOne vers Order)
 - `quantity` (integer, non null)
-- `price` (float, non null)
+- `price` (decimal, non null)
 - `product` (relation ManyToOne vers Product)
 
 ## Relations

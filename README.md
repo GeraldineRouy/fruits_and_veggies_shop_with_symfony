@@ -51,6 +51,7 @@ docker compose exec app php bin/phpunit
 - [Environnement Docker](docs/docker-compose.md)
 - [Spécification projet](docs/specification/specification.md)
 - [Stories](docs/stories/)
+- [Schéma de données](docs/schema-er.md)
 
 ## Stack
 
