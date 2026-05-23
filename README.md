@@ -55,6 +55,25 @@ docker compose exec app php bin/phpunit
 - [Authentification](docs/security/login.md)
 - [Réinitialisation de mot de passe](docs/security/password-reset.md)
 
+## Page d'accueil et top produits
+
+La page d'accueil affiche les 3 produits les plus commandés via un **contrôleur imbriqué** (Embedded Controller).
+
+### Fonctionnement
+
+- `App\Controller\TopProductsController::topProducts()` interroge `ProductRepository::findTopMostOrdered(3)`
+- La requête DQL agrège les quantités des `OrderLine` pour déterminer les produits les plus populaires
+- Le contrôleur n'a pas de route dédiée : il est appelé uniquement via `render(controller(...))` dans `templates/home/index.html.twig`
+- En l'absence de commandes, la section "Top produits" est masquée
+
+### Contrôleur imbriqué
+
+```twig
+{{ render(controller('App\\Controller\\TopProductsController::topProducts')) }}
+```
+
+Ce pattern Symfony permet de déléguer le rendu d'un bloc à un contrôleur dédié, isolant la logique métier du template principal.
+
 ## Stack
 
 - **PHP** : 8.4 (FrankenPHP, ZTS)

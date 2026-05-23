@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\OrderLine;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -58,5 +59,28 @@ class ProductRepository extends ServiceEntityRepository
             ->where('c.id = :categoryId')
             ->setParameter('categoryId', $category->getId())
             ->orderBy('p.name', 'ASC');
+    }
+
+    /**
+     * Retourne les N produits les plus commandés (basé sur la quantité totale dans OrderLine).
+     *
+     * @param int $limit Nombre de produits à retourner (>= 1)
+     * @return Product[] Les produits triés du plus commandé au moins commandé
+     * @throws InvalidArgumentException si $limit < 1
+     */
+    public function findTopMostOrdered(int $limit): array
+    {
+        if ($limit < 1) {
+            throw new InvalidArgumentException('Limit must be at least 1.');
+        }
+
+        return $this->createQueryBuilder('p')
+            ->select('p, SUM(ol.quantity) AS HIDDEN totalQty')
+            ->join(OrderLine::class, 'ol', 'WITH', 'ol.product = p')
+            ->groupBy('p.id')
+            ->orderBy('totalQty', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 }

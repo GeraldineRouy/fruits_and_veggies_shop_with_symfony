@@ -17,4 +17,6 @@
             {% endfor %}
         </div>
     </section>
+
+    {{ render(controller('App\\Controller\\TopProductsController::topProducts')) }}
 {% endblock %}

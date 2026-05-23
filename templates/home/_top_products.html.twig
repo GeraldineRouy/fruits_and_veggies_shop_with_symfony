@@ -1,0 +1,14 @@
+{% if topProducts is not empty %}
+    <section class="top-products">
+        <h2>Top produits</h2>
+        <div class="top-products-grid">
+            {% for product in topProducts %}
+                <a href="{{ path('app_shop_product', { id: product.id }) }}" class="top-product-card">
+                    <img src="{{ asset('images/' ~ product.image) }}" alt="{{ product.name }}">
+                    <h3>{{ product.name }}</h3>
+                    <p class="price">{{ product.price }} €</p>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
