@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class PaginationService
@@ -24,6 +25,27 @@ class PaginationService
      *     hasNext: bool
      * }
      */
+    /**
+     * @param QueryBuilder $qb La QueryBuilder déjà configurée (sans firstResult/maxResults)
+     * @param int $page Numéro de la page courante (1-indexed)
+     * @param int $limit Nombre d'éléments par page
+     * @return array Voir paginate()
+     */
+    public function paginateQuery(
+        QueryBuilder $qb,
+        int $page = 1,
+        int $limit = 12,
+    ): array {
+        $query = $qb
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        $paginator = new Paginator($query);
+
+        return $this->paginate($paginator, $page, $limit);
+    }
+
     public function paginate(
         Paginator $paginator,
         int $page,

@@ -18,6 +18,10 @@ final class RegistrationFlowTest extends WebTestCase
     {
         $this->client = static::createClient();
         $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        $entityManager->createQuery('DELETE FROM App\Entity\OrderLine o')->execute();
+        $entityManager->createQuery('DELETE FROM App\Entity\Order o')->execute();
+        $entityManager->createQuery('DELETE FROM App\Entity\CartItem ci')->execute();
+        $entityManager->createQuery('DELETE FROM App\Entity\Cart c')->execute();
         $entityManager->createQuery('DELETE FROM App\Entity\ResetPasswordRequest r')->execute();
         $entityManager->createQuery('DELETE FROM App\Entity\User u')->execute();
     }

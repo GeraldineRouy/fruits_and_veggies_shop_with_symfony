@@ -10,6 +10,7 @@ use App\Entity\Product;
 use App\Entity\User;
 use App\Repository\CartRepository;
 use App\Service\CartService;
+use App\Service\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
@@ -20,10 +21,12 @@ final class CartServiceTest extends TestCase
     private function createService(
         ?EntityManagerInterface $entityManager = null,
         ?CartRepository $cartRepository = null,
+        ?OrderService $orderService = null,
     ): CartService {
         return new CartService(
             $entityManager ?? $this->createMock(EntityManagerInterface::class),
             $cartRepository ?? $this->createMock(CartRepository::class),
+            $orderService ?? $this->createMock(OrderService::class),
         );
     }
 

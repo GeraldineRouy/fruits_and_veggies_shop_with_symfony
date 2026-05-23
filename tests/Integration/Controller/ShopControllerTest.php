@@ -19,6 +19,8 @@ final class ShopControllerTest extends WebTestCase
     {
         $this->client = static::createClient();
         $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        $entityManager->createQuery('DELETE FROM App\Entity\OrderLine o')->execute();
+        $entityManager->createQuery('DELETE FROM App\Entity\Order o')->execute();
         $entityManager->createQuery('DELETE FROM App\Entity\Product p')->execute();
         $entityManager->createQuery('DELETE FROM App\Entity\Category c')->execute();
     }

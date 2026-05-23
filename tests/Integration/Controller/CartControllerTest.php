@@ -25,6 +25,8 @@ final class CartControllerTest extends WebTestCase
         $this->client = static::createClient();
         $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
 
+        $this->entityManager->createQuery('DELETE FROM App\Entity\OrderLine o')->execute();
+        $this->entityManager->createQuery('DELETE FROM App\Entity\Order o')->execute();
         $this->entityManager->createQuery('DELETE FROM App\Entity\CartItem ci')->execute();
         $this->entityManager->createQuery('DELETE FROM App\Entity\Cart c')->execute();
         $this->entityManager->createQuery('DELETE FROM App\Entity\Product p')->execute();

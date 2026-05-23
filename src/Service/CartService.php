@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Cart;
 use App\Entity\CartItem;
+use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Repository\CartRepository;
@@ -17,8 +18,11 @@ class CartService
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly CartRepository $cartRepository,
-    ) {}
+        private readonly CartRepository         $cartRepository,
+        private readonly OrderService           $orderService,
+    )
+    {
+    }
 
     public function getOrCreateCart(User $user): Cart
     {
@@ -135,7 +139,7 @@ class CartService
         $total = 0;
 
         foreach ($cart->getItems() as $item) {
-            $total += (float) $item->getPrice() * $item->getQuantity();
+            $total += (float)$item->getPrice() * $item->getQuantity();
         }
 
         return number_format($total, 2, '.', '');
@@ -150,5 +154,10 @@ class CartService
         }
 
         return $cart->getItems()->toArray();
+    }
+
+    public function cartToOrder(User $user): Order
+    {
+        return $this->orderService->createFromCart($user);
     }
 }

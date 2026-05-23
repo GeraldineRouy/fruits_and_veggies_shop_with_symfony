@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes commandes - Fruits & Veggies{% endblock %}
+
+{% block body %}
+    <h1>Mes commandes</h1>
+
+    {% if ordersData|length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for orderData in ordersData %}
+                    <tr>
+                        <td>#{{ orderData.order.id }}</td>
+                        <td>{{ orderData.order.orderedAt|date('d/m/Y H:i') }}</td>
+                        <td><span class="badge badge-{{ orderData.order.status.value }}">{{ status_labels[orderData.order.status.value] }}</span></td>
+                        <td>{{ orderData.total|format_currency('EUR') }}</td>
+                        <td>
+                            <a href="{{ path('app_order_detail', {id: orderData.order.id}) }}">Voir</a>
+                            {% if orderData.order.status.value == 'confirmed' %}
+                                <form method="post" action="{{ path('app_order_cancel', {id: orderData.order.id}) }}" onsubmit="return confirm('Annuler cette commande ?');">
+                                    <button type="submit">Annuler</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Vous n'avez pas encore passé de commande.</p>
+        <a href="{{ path('app_home') }}" class="btn">Découvrir nos produits</a>
+    {% endif %}
+{% endblock %}

@@ -27,7 +27,11 @@
             <div class="cart-summary">
                 <p class="cart-total"><strong>Total :</strong> {{ total|format_currency('EUR') }}</p>
 
-                <form method="post" action="{{ path('app_cart_clear') }}" onsubmit="return confirm('Vider le panier ?');">
+                <form method="post" action="{{ path('app_order_checkout') }}" style="display: inline;">
+                    <button type="submit" class="btn btn-success">Valider la commande</button>
+                </form>
+
+                <form method="post" action="{{ path('app_cart_clear') }}" onsubmit="return confirm('Vider le panier ?');" style="display: inline;">
                     <button type="submit" class="btn btn-danger">Vider le panier</button>
                 </form>
             </div>

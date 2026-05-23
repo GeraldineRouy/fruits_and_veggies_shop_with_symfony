@@ -1,0 +1,17 @@
+Merci pour votre commande #{{ order.id }} !
+
+Bonjour {{ order.user.firstName }},
+
+Votre commande #{{ order.id }} a bien été confirmée.
+
+Récapitulatif :
+{% for line in order.orderLines %}
+- {{ line.product.name }} x{{ line.quantity }} : {{ (line.price * line.quantity)|format_currency('EUR') }}
+{% endfor %}
+
+Total : {{ total|format_currency('EUR') }}
+
+Votre commande sera traitée dans les plus brefs délais.
+
+--
+Fruits & Veggies Shop

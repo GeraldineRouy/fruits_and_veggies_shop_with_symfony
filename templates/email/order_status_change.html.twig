@@ -1,0 +1,43 @@
+{% extends 'email/base.html.twig' %}
+
+{% block subject %}Votre commande #{{ order.id }} a changé de statut{% endblock %}
+
+{% block body %}
+<h2>Votre commande a changé de statut</h2>
+<p>Bonjour {{ order.user.firstName }},</p>
+<p>Votre commande <strong>#{{ order.id }}</strong> est maintenant <strong>{{ status_label }}</strong>.</p>
+
+<h3>Récapitulatif de votre commande</h3>
+<table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
+    <thead>
+        <tr style="background: #f5f5f5;">
+            <th style="padding: 8px; text-align: left; border-bottom: 2px solid #ddd;">Produit</th>
+            <th style="padding: 8px; text-align: right; border-bottom: 2px solid #ddd;">Prix unitaire</th>
+            <th style="padding: 8px; text-align: right; border-bottom: 2px solid #ddd;">Quantité</th>
+            <th style="padding: 8px; text-align: right; border-bottom: 2px solid #ddd;">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for line in order.orderLines %}
+        <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ line.product.name }}</td>
+            <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{ line.price|format_currency('EUR') }}</td>
+            <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{ line.quantity }}</td>
+            <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{ (line.price * line.quantity)|format_currency('EUR') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" style="padding: 8px; text-align: right; font-weight: bold;">Total :</td>
+            <td style="padding: 8px; text-align: right; font-weight: bold;">{{ total|format_currency('EUR') }}</td>
+        </tr>
+    </tfoot>
+</table>
+
+{% if order.status.value == 'cancelled' %}
+<p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
+{% else %}
+<p>Nous vous tiendrons informé de l'avancement de votre commande.</p>
+{% endif %}
+{% endblock %}

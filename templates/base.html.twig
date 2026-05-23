@@ -28,6 +28,7 @@
                     Panier
                     <span class="cart-badge">{{ cart_item_count() }}</span>
                 </a>
+                <a href="{{ path('app_order_list') }}">Mes commandes</a>
                 <span>{{ app.user.firstName }}</span>
                 <a href="{{ path('app_logout') }}">Déconnexion</a>
             {% else %}

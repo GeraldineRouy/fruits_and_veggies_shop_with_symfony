@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande #{{ order.id }} - Administration{% endblock %}
+
+{% block body %}
+    <h1>Commande #{{ order.id }}</h1>
+
+    <p><strong>Client :</strong> {{ order.user.firstName }} {{ order.user.lastName }} ({{ order.user.email }})</p>
+    <p><strong>Date :</strong> {{ order.orderedAt|date('d/m/Y H:i') }}</p>
+    <p><strong>Statut :</strong> <span class="badge badge-{{ order.status.value }}">{{ status_label }}</span></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Prix unitaire</th>
+                <th>Quantité</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for line in order.orderLines %}
+                <tr>
+                    <td>{{ line.product.name }}</td>
+                    <td>{{ line.price|format_currency('EUR') }}</td>
+                    <td>{{ line.quantity }}</td>
+                    <td>{{ (line.price * line.quantity)|format_currency('EUR') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3"><strong>Total :</strong></td>
+                <td><strong>{{ total|format_currency('EUR') }}</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    {% if next_statuses|length > 0 %}
+        <h2>Changer le statut</h2>
+        <form method="post" action="{{ path('app_admin_order_status', {id: order.id}) }}">
+            <select name="status">
+                {% for status in next_statuses %}
+                    <option value="{{ status.value }}">{{ status.value|capitalize }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Mettre à jour</button>
+        </form>
+    {% else %}
+        <p>Aucune transition disponible pour le statut actuel.</p>
+    {% endif %}
+
+    {% if order.status.value != 'cancelled' %}
+        <form method="post" action="{{ path('app_admin_order_cancel', {id: order.id}) }}" onsubmit="return confirm('Annuler cette commande ?');">
+            <button type="submit" class="btn btn-danger">Annuler la commande</button>
+        </form>
+    {% endif %}
+
+    <a href="{{ path('app_admin_orders') }}">← Retour à la liste</a>
+{% endblock %}

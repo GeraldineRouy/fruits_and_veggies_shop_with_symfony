@@ -24,6 +24,8 @@ final class ProductRepositoryTest extends KernelTestCase
         $this->productRepository = $container->get(ProductRepository::class);
         $this->entityManager = $container->get(EntityManagerInterface::class);
 
+        $this->entityManager->createQuery('DELETE FROM App\Entity\OrderLine o')->execute();
+        $this->entityManager->createQuery('DELETE FROM App\Entity\Order o')->execute();
         $this->entityManager->createQuery('DELETE FROM App\Entity\Product p')->execute();
         $this->entityManager->createQuery('DELETE FROM App\Entity\Category c')->execute();
     }
