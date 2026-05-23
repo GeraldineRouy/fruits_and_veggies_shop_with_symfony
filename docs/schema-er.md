@@ -5,6 +5,7 @@
 ```mermaid
 erDiagram
     User ||--o{ Order : "a pour commandes"
+    User ||--o{ ResetPasswordRequest : "demande un reset"
     Order ||--|{ OrderLine : "contient"
     OrderLine }o--|| Product : "référence"
     Product }o--o{ Category : "appartient à"
@@ -18,6 +19,14 @@ erDiagram
         datetime verifiedAt "nullable"
         datetime lastLoginAt "nullable"
         boolean isActive
+        string emailVerificationToken "nullable"
+    }
+    ResetPasswordRequest {
+        int id PK
+        int user_id FK
+        string token
+        datetime requestedAt
+        datetime expiresAt
     }
     Category {
         int id PK
@@ -60,6 +69,7 @@ erDiagram
 | verified_at | datetime | NULLABLE |
 | last_login_at | datetime | NULLABLE |
 | is_active | boolean | NOT NULL, DEFAULT true |
+| email_verification_token | string(64) | NULLABLE |
 
 ### Category
 | Champ | Type | Contraintes |
@@ -94,8 +104,18 @@ erDiagram
 | quantity | integer | NOT NULL |
 | price | decimal(10,2) | NOT NULL |
 
+### ResetPasswordRequest
+| Champ | Type | Contraintes |
+|-------|------|-------------|
+| id | integer | PK, auto-increment |
+| user_id | integer | FK → User.id, NOT NULL |
+| token | string(64) | NOT NULL |
+| requested_at | datetime_immutable | NOT NULL |
+| expires_at | datetime_immutable | NOT NULL |
+
 ## Relations
 - **User 1---* Order** : Un utilisateur peut avoir plusieurs commandes
+- **User 1---* ResetPasswordRequest** : Un utilisateur peut avoir plusieurs demandes de reset
 - **Order 1---* OrderLine** : Une commande contient plusieurs lignes
 - **OrderLine *---1 Product** : Une ligne référence un seul produit
 - **Product *---* Category** : Un produit peut avoir plusieurs catégories (table `product_category`)

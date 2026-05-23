@@ -1,0 +1,10 @@
+{
+    "private": true,
+    "devDependencies": {
+        "@playwright/test": "^1.52"
+    },
+    "scripts": {
+        "test:e2e": "npx playwright test",
+        "test:e2e:ui": "npx playwright test --ui"
+    }
+}

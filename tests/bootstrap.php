@@ -12,7 +12,7 @@ if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 }
 
-// Ensure the test database exists
+// Ensure the test database exists with the schema
 if (($_SERVER['APP_ENV'] ?? 'dev') === 'test') {
     try {
         $kernel = new \App\Kernel($_SERVER['APP_ENV'], (bool) ($_SERVER['APP_DEBUG'] ?? false));
@@ -20,6 +20,7 @@ if (($_SERVER['APP_ENV'] ?? 'dev') === 'test') {
 
         $application = new \Symfony\Bundle\FrameworkBundle\Console\Application($kernel);
         $application->setAutoExit(false);
+
         $application->run(
             new \Symfony\Component\Console\Input\ArrayInput([
                 'command' => 'doctrine:database:create',
@@ -28,8 +29,16 @@ if (($_SERVER['APP_ENV'] ?? 'dev') === 'test') {
             new \Symfony\Component\Console\Output\NullOutput()
         );
 
+        $application->run(
+            new \Symfony\Component\Console\Input\ArrayInput([
+                'command' => 'doctrine:migrations:migrate',
+                '--no-interaction' => true,
+            ]),
+            new \Symfony\Component\Console\Output\NullOutput()
+        );
+
         $kernel->shutdown();
     } catch (\Throwable $e) {
-        echo 'Warning: Could not create test database: ' . $e->getMessage() . PHP_EOL;
+        echo 'Warning: Could not set up test database: ' . $e->getMessage() . PHP_EOL;
     }
 }

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="register-container">
+    <h1>Inscription</h1>
+
+    {% for label, messages in app.flashes(['error']) %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(form) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.firstName) }}
+        {{ form_row(form.lastName) }}
+        {{ form_row(form.plainPassword) }}
+
+        <button type="submit" class="btn btn-primary">Créer mon compte</button>
+    {{ form_end(form) }}
+
+    <p class="login-links">
+        <a href="{{ path('app_login') }}">Déjà un compte ? Se connecter</a>
+    </p>
+</div>
+{% endblock %}

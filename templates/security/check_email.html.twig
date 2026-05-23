@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vérifiez vos emails{% endblock %}
+
+{% block body %}
+<div class="check-email-container">
+    <h1>Vérifiez vos emails</h1>
+
+    <p>Un email de validation vous a été envoyé à <strong>{{ email }}</strong>.</p>
+    <p>Cliquez sur le lien dans l'email pour activer votre compte.</p>
+
+    <a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a>
+</div>
+{% endblock %}

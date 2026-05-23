@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email vérifié{% endblock %}
+
+{% block body %}
+<div class="verification-success-container">
+    <h1>Email vérifié avec succès</h1>
+
+    <p>Votre adresse email a été vérifiée. Vous pouvez maintenant vous connecter.</p>
+
+    <a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a>
+</div>
+{% endblock %}

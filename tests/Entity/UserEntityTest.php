@@ -39,7 +39,7 @@ class UserEntityTest extends TestCase
     public function userDefaultValues(): void
     {
         $user = new User();
-        $this->assertEquals([], $user->getRoles());
+        $this->assertEquals(['ROLE_USER'], $user->getRoles());
         $this->assertTrue($user->isActive());
         $this->assertNull($user->getVerifiedAt());
         $this->assertNull($user->getLastLoginAt());

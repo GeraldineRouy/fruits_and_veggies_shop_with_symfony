@@ -20,6 +20,16 @@
         {% endif %}
     </head>
     <body>
+        <nav>
+            <a href="{{ path('app_home') }}">Accueil</a>
+            {% if app.user %}
+                <span>{{ app.user.firstName }}</span>
+                <a href="{{ path('app_logout') }}">Déconnexion</a>
+            {% else %}
+                <a href="{{ path('app_register') }}">Inscription</a>
+                <a href="{{ path('app_login') }}">Connexion</a>
+            {% endif %}
+        </nav>
         {% block body %}{% endblock %}
     </body>
 </html>

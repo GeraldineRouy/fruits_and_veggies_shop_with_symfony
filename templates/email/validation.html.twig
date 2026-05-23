@@ -1,0 +1,10 @@
+{% extends 'email/base.html.twig' %}
+
+{% block subject %}Confirmez votre adresse email{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue {{ user.firstName }} !</h1>
+    <p>Cliquez sur le lien ci-dessous pour confirmer votre adresse email :</p>
+    <a href="{{ validationUrl }}">Confirmer mon email</a>
+    <p>Ce lien expire dans 7 jours.</p>
+{% endblock %}
