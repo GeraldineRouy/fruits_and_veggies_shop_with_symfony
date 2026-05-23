@@ -16,7 +16,16 @@
                     {%- if not loop.last %}, {% endif %}
                 {% endfor %}
             </p>
-            <button class="btn" disabled title="Bientôt disponible">Ajouter au panier</button>
+            {% if app.user %}
+                <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="add-to-cart-form">
+                    <input type="hidden" name="add_to_cart[_token]" value="{{ csrf_token('add_to_cart') }}">
+                    <label for="add_to_cart_quantity">Quantité :</label>
+                    <input type="number" id="add_to_cart_quantity" name="add_to_cart[quantity]" value="1" min="1">
+                    <button type="submit" class="btn">Ajouter au panier</button>
+                </form>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn">Connectez-vous pour acheter</a>
+            {% endif %}
             <a href="{{ path('app_shop_category', { id: product.categories.first.id }) }}" class="back-link">← Retour à la catégorie</a>
         </div>
     </article>

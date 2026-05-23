@@ -1,0 +1,23 @@
+{% set product = item.product %}
+{% set subtotal = (item.price * item.quantity)|number_format(2, '.', '') %}
+
+<tr>
+    <td>
+        <img src="{{ asset(product.image) }}" alt="{{ product.name }}" width="60" height="60">
+        <a href="{{ path('app_shop_product', { id: product.id }) }}">{{ product.name }}</a>
+    </td>
+    <td>{{ item.price|format_currency('EUR') }}</td>
+    <td>
+        <form method="post" action="{{ path('app_cart_update', { id: item.id }) }}" class="cart-quantity-form">
+            <input type="hidden" name="update_cart_item[_token]" value="{{ csrf_token('update_cart_item') }}">
+            <input type="number" name="update_cart_item[quantity]" value="{{ item.quantity }}" min="0" class="cart-quantity-input">
+            <button type="submit" class="btn btn-sm">OK</button>
+        </form>
+    </td>
+    <td>{{ subtotal|format_currency('EUR') }}</td>
+    <td>
+        <form method="post" action="{{ path('app_cart_remove', { id: item.id }) }}">
+            <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+        </form>
+    </td>
+</tr>

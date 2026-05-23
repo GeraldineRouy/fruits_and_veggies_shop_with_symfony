@@ -24,6 +24,10 @@
             <a href="{{ path('app_home') }}">Accueil</a>
             <a href="{{ path('app_home') }}">Boutique</a>
             {% if app.user %}
+                <a href="{{ path('app_cart_index') }}" class="nav-cart">
+                    Panier
+                    <span class="cart-badge">{{ cart_item_count() }}</span>
+                </a>
                 <span>{{ app.user.firstName }}</span>
                 <a href="{{ path('app_logout') }}">Déconnexion</a>
             {% else %}

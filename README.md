@@ -76,6 +76,33 @@ Les emails transactionnels sont envoyés via `App\Service\MailerService` :
 - Validation de compte après inscription
 - Réinitialisation de mot de passe
 
+## Panier d'achat
+
+Le panier est une fonctionnalité réservée aux utilisateurs connectés.
+
+### Routes
+
+| Méthode | Route | Description |
+|---------|-------|-------------|
+| GET | `/panier` | Afficher le contenu du panier |
+| POST | `/panier/ajouter/{id}` | Ajouter un produit (id = Product) |
+| POST | `/panier/modifier/{id}` | Modifier la quantité (id = CartItem) |
+| POST | `/panier/supprimer/{id}` | Supprimer un produit (id = CartItem) |
+| POST | `/panier/vider` | Vider le panier |
+
+### Service
+
+`App\Service\CartService` — Documentation complète dans le code source.
+
+Méthodes principales :
+- `getOrCreateCart(User)` : Récupère ou crée le panier d'un utilisateur
+- `addProduct(User, Product, int $quantity = 1)` : Ajoute un produit
+- `updateItemQuantity(CartItem, int $quantity)` : Modifie la quantité (0 = supprime)
+- `removeItem(CartItem)` : Supprime un item du panier
+- `clearCart(User)` : Vide le panier
+- `getTotal(User) : string` : Calcule le total
+- `getProductCount(User) : int` : Compte les articles
+
 ## Inscription et connexion
 
 | Route | Description |

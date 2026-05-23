@@ -9,11 +9,20 @@
     {% if pagination.items|length > 0 %}
         <div class="products-grid">
             {% for product in pagination.items %}
-                <a href="{{ path('app_shop_product', { id: product.id }) }}" class="product-card">
-                    <img src="{{ asset(product.image) }}" alt="{{ product.name }}" loading="lazy">
-                    <h3>{{ product.name }}</h3>
-                    <p class="price">{{ product.price|format_currency('EUR') }}</p>
-                </a>
+                <div class="product-card">
+                    <a href="{{ path('app_shop_product', { id: product.id }) }}">
+                        <img src="{{ asset(product.image) }}" alt="{{ product.name }}" loading="lazy">
+                        <h3>{{ product.name }}</h3>
+                        <p class="price">{{ product.price|format_currency('EUR') }}</p>
+                    </a>
+                    {% if app.user %}
+                        <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="add-to-cart-list">
+                            <input type="hidden" name="add_to_cart[_token]" value="{{ csrf_token('add_to_cart') }}">
+                            <input type="hidden" name="add_to_cart[quantity]" value="1">
+                            <button type="submit" class="btn btn-sm">Ajouter au panier</button>
+                        </form>
+                    {% endif %}
+                </div>
             {% endfor %}
         </div>
 
