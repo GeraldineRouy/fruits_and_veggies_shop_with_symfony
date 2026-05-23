@@ -1,0 +1,17 @@
+### Page d'accueil
+GET http://localhost:8000/
+
+### Liste des produits de la catégorie 1 (page 1)
+GET http://localhost:8000/boutique/1
+
+### Liste des produits de la catégorie 1 (page 2)
+GET http://localhost:8000/boutique/1?page=2
+
+### Détail du produit 1
+GET http://localhost:8000/boutique/produit/1
+
+### Catégorie inexistante (doit retourner 404)
+GET http://localhost:8000/boutique/99999
+
+### Produit inexistant (doit retourner 404)
+GET http://localhost:8000/boutique/produit/99999

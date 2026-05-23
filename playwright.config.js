@@ -1,20 +1,13 @@
-import { defineConfig, devices } from '@playwright/test';
+// @ts-check
+import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
     testDir: './tests/E2E',
-    fullyParallel: false,
-    forbidOnly: !!process.env.CI,
-    retries: process.env.CI ? 2 : 0,
-    workers: process.env.CI ? 1 : 1,
-    reporter: 'html',
+    timeout: 30000,
+    retries: 0,
     use: {
-        baseURL: 'http://localhost:8000',
-        trace: 'on-first-retry',
+        baseURL: 'http://127.0.0.1:8000',
+        headless: true,
     },
-    projects: [
-        {
-            name: 'chromium',
-            use: { ...devices['Desktop Chrome'] },
-        },
-    ],
+    reporter: 'list',
 });

@@ -5,4 +5,16 @@
 {% block body %}
     <h1>Bienvenue chez Fruits & Veggies</h1>
     <p>Votre magasin de fruits et légumes frais en ligne.</p>
+
+    <section class="categories">
+        <h2>Nos produits par catégories</h2>
+        <div class="categories-grid">
+            {% for category in categories %}
+                <a href="{{ path('app_shop_category', { id: category.id }) }}" class="category-card">
+                    <h3>{{ category.name }}</h3>
+                    <p>{{ category.description }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
 {% endblock %}

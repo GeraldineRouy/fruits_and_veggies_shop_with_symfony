@@ -7,8 +7,9 @@ DB_USER="${DB_USER:-app}"
 TIMEOUT=60
 ELAPSED=0
 
-# Install composer dependencies if vendor is missing
-if [ ! -d "vendor" ]; then
+# Install composer dependencies if autoloader is missing
+# (vendor/ is a Docker volume; directory exists even when empty)
+if [ ! -f "vendor/autoload.php" ]; then
     echo "Installing Composer dependencies..."
     composer install --no-interaction --prefer-dist
     echo "Composer dependencies installed."
@@ -26,6 +27,12 @@ while ! pg_isready -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" > /dev/null 2
 done
 
 echo "PostgreSQL is ready."
+
+# Run pending migrations
+php bin/console doctrine:migrations:migrate --no-interaction || true
+
+# Warm up Symfony cache (tmpfs is cleared every restart)
+php bin/console cache:warmup || true
 
 # Clean stale lock files
 rm -f var/cache/*/*.php.lock

@@ -27,6 +27,7 @@ RUN set -eux; \
 
 # Configure PHP for development
 RUN echo "date.timezone=Europe/Paris" > /usr/local/etc/php/conf.d/timezone.ini
+COPY docker-php.ini /usr/local/etc/php/conf.d/docker-php.ini
 
 WORKDIR /app
 

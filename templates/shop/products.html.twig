@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Boutique - {{ category.name }} - Fruits & Veggies{% endblock %}
+
+{% block body %}
+    <h1>{{ category.name }}</h1>
+    <p>{{ category.description }}</p>
+
+    {% if pagination.items|length > 0 %}
+        <div class="products-grid">
+            {% for product in pagination.items %}
+                <a href="{{ path('app_shop_product', { id: product.id }) }}" class="product-card">
+                    <img src="{{ asset(product.image) }}" alt="{{ product.name }}" loading="lazy">
+                    <h3>{{ product.name }}</h3>
+                    <p class="price">{{ product.price|format_currency('EUR') }}</p>
+                </a>
+            {% endfor %}
+        </div>
+
+        {% include 'shop/_pagination.html.twig' with {
+            pagination: pagination,
+            categoryId: category.id
+        } %}
+    {% else %}
+        <p>Aucun produit dans cette catégorie pour le moment.</p>
+    {% endif %}
+{% endblock %}

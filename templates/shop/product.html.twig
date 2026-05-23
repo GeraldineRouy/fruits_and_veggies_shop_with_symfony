@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }} - Fruits & Veggies{% endblock %}
+
+{% block body %}
+    <article class="product-detail">
+        <img src="{{ asset(product.image) }}" alt="{{ product.name }}" class="product-detail__image">
+        <div class="product-detail__info">
+            <h1>{{ product.name }}</h1>
+            <p class="price">{{ product.price|format_currency('EUR') }}</p>
+            <p>{{ product.description }}</p>
+            <p class="categories">
+                Catégories :
+                {% for category in product.categories %}
+                    <a href="{{ path('app_shop_category', { id: category.id }) }}">{{ category.name }}</a>
+                    {%- if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <button class="btn" disabled title="Bientôt disponible">Ajouter au panier</button>
+            <a href="{{ path('app_shop_category', { id: product.categories.first.id }) }}" class="back-link">← Retour à la catégorie</a>
+        </div>
+    </article>
+{% endblock %}

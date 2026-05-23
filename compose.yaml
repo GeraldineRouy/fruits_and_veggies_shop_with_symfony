@@ -9,6 +9,7 @@ services:
       - /app/var/log
     volumes:
       - .:/app
+      - vendor_data:/app/vendor
     depends_on:
       database:
         condition: service_healthy
@@ -54,3 +55,4 @@ services:
 
 volumes:
   database_data:
+  vendor_data:
