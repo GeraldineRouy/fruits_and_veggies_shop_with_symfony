@@ -5,7 +5,11 @@
             {% for product in topProducts %}
                 <a href="{{ path('app_shop_product', { id: product.id }) }}" class="top-product-card bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
                     <div class="relative">
-                        <img src="{{ asset(product.image) }}" alt="{{ product.name }}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                        {% if product.image %}
+                            <img src="{{ asset(product.image) }}" alt="{{ product.name }}" class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300">
+                        {% else %}
+                            <div class="w-full aspect-square bg-gray-200 flex items-center justify-center text-gray-400 text-sm">Image non disponible</div>
+                        {% endif %}
                         <div class="absolute top-2 left-2 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full w-8 h-8 flex items-center justify-center shadow-md">
                             {{ loop.index }}
                         </div>

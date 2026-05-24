@@ -60,7 +60,7 @@
 
                             <div class="hidden md:flex items-center space-x-6">
                                 <a href="{{ path('app_home') }}" class="hover:text-brand-200 transition-colors">Accueil</a>
-                                <a href="{{ path('app_home') }}" class="hover:text-brand-200 transition-colors">Boutique</a>
+                                <a href="{{ path('app_shop_index') }}" class="hover:text-brand-200 transition-colors">Boutique</a>
                                 {% if app.user %}
                                     <a href="{{ path('app_order_list') }}" class="hover:text-brand-200 transition-colors">Mes commandes</a>
                                 {% endif %}
@@ -82,6 +82,11 @@
                                         </div>
                                     </a>
                                     <div class="hidden md:flex items-center space-x-2">
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <img src="{{ asset('assets/images/avatars/avatar_admin.png') }}" alt="Admin" class="w-8 h-8 rounded-full object-cover mr-2">
+                                        {% else %}
+                                            <img src="{{ asset('assets/images/avatars/avatar_user.png') }}" alt="Utilisateur" class="w-8 h-8 rounded-full object-cover mr-2">
+                                        {% endif %}
                                         <span class="text-sm">{{ app.user.firstName }}</span>
                                         <a href="{{ path('app_logout') }}" class="text-sm hover:text-brand-200 transition-colors">Déconnexion</a>
                                     </div>
@@ -100,11 +105,18 @@
 
                         <div class="md:hidden hidden mobile-menu pb-4" data-mobile-menu-target="menu">
                             <a href="{{ path('app_home') }}" class="block py-2 hover:text-brand-200 transition-colors">Accueil</a>
-                            <a href="{{ path('app_home') }}" class="block py-2 hover:text-brand-200 transition-colors">Boutique</a>
+                            <a href="{{ path('app_shop_index') }}" class="block py-2 hover:text-brand-200 transition-colors">Boutique</a>
                             {% if app.user %}
                                 <a href="{{ path('app_order_list') }}" class="block py-2 hover:text-brand-200 transition-colors">Mes commandes</a>
                                 <hr class="border-brand-600 my-2">
-                                <span class="block py-2 text-sm">{{ app.user.firstName }}</span>
+                                <div class="flex items-center space-x-2 py-2">
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <img src="{{ asset('assets/images/avatars/avatar_admin.png') }}" alt="Admin" class="w-8 h-8 rounded-full object-cover">
+                                    {% else %}
+                                        <img src="{{ asset('assets/images/avatars/avatar_user.png') }}" alt="Utilisateur" class="w-8 h-8 rounded-full object-cover">
+                                    {% endif %}
+                                    <span class="text-sm">{{ app.user.firstName }}</span>
+                                </div>
                                 <a href="{{ path('app_logout') }}" class="block py-2 hover:text-brand-200 transition-colors">Déconnexion</a>
                             {% else %}
                                 <hr class="border-brand-600 my-2">
@@ -150,7 +162,7 @@
                                 <h3 class="text-lg font-semibold mb-4">Liens rapides</h3>
                                 <ul class="space-y-2 text-sm">
                                     <li><a href="{{ path('app_home') }}" class="text-brand-200 hover:text-white transition-colors">Accueil</a></li>
-                                    <li><a href="{{ path('app_home') }}" class="text-brand-200 hover:text-white transition-colors">Boutique</a></li>
+                                    <li><a href="{{ path('app_shop_index') }}" class="text-brand-200 hover:text-white transition-colors">Boutique</a></li>
                                     {% if app.user %}
                                         <li><a href="{{ path('app_order_list') }}" class="text-brand-200 hover:text-white transition-colors">Mes commandes</a></li>
                                     {% else %}

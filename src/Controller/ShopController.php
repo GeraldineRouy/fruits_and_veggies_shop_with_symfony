@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Service\PaginationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +16,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ShopController extends AbstractController
 {
+    #[Route('/boutique', name: 'app_shop_index')]
+    public function index(CategoryRepository $categoryRepository): Response
+    {
+        return $this->render('shop/index.html.twig', [
+            'categories' => $categoryRepository->findAllWithProductCount(),
+        ]);
+    }
+
     #[Route('/boutique/{id}', name: 'app_shop_category', requirements: ['id' => '\d+'])]
     public function category(
         Category $category,

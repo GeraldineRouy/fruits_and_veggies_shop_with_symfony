@@ -11,7 +11,11 @@
             {% for item in items %}
                 {% set product = item.product %}
                 <div class="flex items-center space-x-3 p-3">
-                    <img src="{{ asset(product.image) }}" alt="{{ product.name }}" class="w-10 h-10 rounded object-cover bg-gray-100">
+                    {% if product.image %}
+                        <img src="{{ asset(product.image) }}" alt="{{ product.name }}" class="w-10 h-10 rounded object-cover bg-gray-100">
+                    {% else %}
+                        <div class="w-10 h-10 rounded flex-shrink-0 bg-gray-200 flex items-center justify-center text-gray-400 text-xs">Image non disponible</div>
+                    {% endif %}
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-medium text-gray-800 truncate">{{ product.name }}</p>
                         <p class="text-xs text-gray-500">

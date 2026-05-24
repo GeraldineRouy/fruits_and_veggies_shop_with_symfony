@@ -7,3 +7,7 @@
 * Rajouter un style CSS aéré avec la lib tailwindcss (header/navbar, footer, cartes produits, aperçu du contenu du panier au survol de la souris) [PROCESSED: story-012]
 * Pour valider un panier, et donc valider une commande, simuler un formulaire de paiement, un écran de confirmation de commande et envoyez un email de confirmation. [PROCESSED: story-013]
 * Dans la vue Accueil : Ajoute un petit de texte de bienvenue et de présentation de la boutique. Le top 3 des produits les plus vendus doit s'afficher juste en dessous. Puis affiche les catégories des produits. [PROCESSED: story-014]
+
+* J'ai ajouté des images, dans le dossier public/assets/images, format .png pour les produits (dossier products) pour la page d'accueil (dossier home/images) et pour ajouter une petite icône utilisateur dans le header (dossier avatars, user pour le rôle user et admin pour le rôle admin). associe ces images aux cartes produits, pour l'image 'welcome' implémente là dans la vue home. [PROCESSED: story-015]
+* Efface les placeholders en format jpg du dossier products. [PROCESSED: story-015]
+* Quand je teste manuellement le paiement d'une commande, j'ai un message d'erreur : il faut absolument corriger ce bug majeur. [PROCESSED: story-016]

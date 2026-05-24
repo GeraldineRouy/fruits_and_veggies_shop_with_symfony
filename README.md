@@ -59,6 +59,31 @@ docker compose exec app php bin/phpunit
 | `docker compose exec app php bin/phpunit` | Exécuter les tests |
 | `docker compose build app` | Reconstruire l'image PHP |
 
+## Images et assets
+
+### Structure des dossiers
+
+```
+public/assets/images/
+├── home/
+│   └── welcome.png          # Image de bienvenue page d'accueil
+├── products/
+│   ├── pommes.png           # Images des produits (PNG)
+│   ├── bananes.png
+│   └── ...
+└── avatars/
+    ├── avatar_user.png      # Avatar utilisateur connecté
+    └── avatar_admin.png     # Avatar administrateur
+```
+
+### Gestion des images produits
+
+- Les images des produits sont stockées dans `public/assets/images/products/` au format PNG
+- Le champ `image` de l'entité `Product` contient le chemin relatif (ex: `assets/images/products/pommes.png`)
+- La fonction Twig `{{ asset() }}` résout le chemin depuis le dossier `public/`
+- Pour les produits sans image associée, un message "Image non disponible" est affiché
+- Les images sont chargées avec `loading="lazy"` pour optimiser les performances
+
 ## Documentation
 
 - [Environnement Docker](docs/docker-compose.md)
@@ -189,6 +214,24 @@ L'environnement Docker utilise **Mailpit** pour les emails en développement.
 Les emails transactionnels sont envoyés via `App\Service\MailerService` :
 - Validation de compte après inscription
 - Réinitialisation de mot de passe
+
+### Accéder à l'interface Mailpit
+
+Pour consulter les emails reçus (validation de compte, confirmation de commande, etc.) :
+
+```bash
+# Récupérer l'URL d'accès (port dynamique)
+docker compose port mailer 8025
+```
+
+Puis ouvrir l'URL affichée (ex: `http://localhost:8025`) dans le navigateur.
+
+Ou, si le port 8025 est libre et mappé dans `compose.yaml` :
+[http://localhost:8025](http://localhost:8025)
+
+> 💡 Après une inscription sur `/register`, l'email de validation apparaît immédiatement dans Mailpit. Cliquez sur le lien de validation dans l'email pour activer le compte.
+
+> ⚠️ Il se peut que le port mappé soit occupé par un autre service. Dans ce cas, utilisez la commande `docker compose port mailer 8025` pour obtenir le port dynamique affecté.
 
 ## Panier d'achat
 

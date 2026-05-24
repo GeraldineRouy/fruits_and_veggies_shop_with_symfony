@@ -1,16 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - Fruits & Veggies{% endblock %}
+{% block title %}Boutique - Fruits & Veggies{% endblock %}
 
 {% block body %}
-    <section class="welcome mb-12 text-center">
-        <h1 class="text-4xl font-bold text-gray-800 mb-4">Bienvenue chez Fruits &amp; Veggies Shop, votre primeur et épicerie fine grenobloise !</h1>
-        <p class="text-xl text-gray-600">Nous sommes ravis de vous accueillir pour vous faire découvrir notre sélection de produits frais d'exception.</p>
-    </section>
-
-    <img src="{{ asset('assets/images/home/welcome.png') }}" alt="Bienvenue chez Fruits & Veggies Shop"
-         class="w-full max-w-4xl mx-auto h-auto rounded-xl shadow-md my-12 object-cover" loading="lazy">
-
     {{ render(controller('App\\Controller\\TopProductsController::topProducts')) }}
 
     <section class="categories mb-12">

@@ -168,6 +168,40 @@ class HomeControllerTest extends WebTestCase
         $this->assertLessThan($posBanane, $posPomme, 'Pomme should appear before Banane');
     }
 
+    #[Test]
+    public function welcomeImageIsDisplayedOnHomePage(): void
+    {
+        $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $content = $this->client->getResponse()->getContent();
+        $this->assertStringContainsString('assets/images/home/welcome.png', $content);
+        $this->assertStringContainsString('Bienvenue chez Fruits & Veggies Shop', $content);
+    }
+
+    #[Test]
+    public function welcomeImageIsPositionedBetweenTextAndTopProducts(): void
+    {
+        $category = $this->createCategory('Fruits', 'Fruits frais');
+        $product = $this->createProduct('Pomme', $category);
+        $user = $this->createUser('test@example.com');
+        $this->createOrderWithProduct($user, $product, 5);
+
+        $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $content = $this->client->getResponse()->getContent();
+        $posWelcome = strpos($content, 'Bienvenue chez Fruits');
+        $posImage = strpos($content, 'assets/images/home/welcome.png');
+        $posTopProducts = strpos($content, 'top-products');
+
+        $this->assertNotFalse($posWelcome, 'Welcome text should be present');
+        $this->assertNotFalse($posImage, 'Welcome image should be present');
+        $this->assertNotFalse($posTopProducts, 'Top products section should be present');
+        $this->assertLessThan($posImage, $posWelcome, 'Welcome text should appear before the image');
+        $this->assertLessThan($posTopProducts, $posImage, 'Welcome image should appear before top products');
+    }
+
     private function createCategory(string $name, string $description): Category
     {
         $category = new Category();
