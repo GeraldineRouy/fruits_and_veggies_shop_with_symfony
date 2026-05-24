@@ -36,7 +36,75 @@ class HomeControllerTest extends WebTestCase
     {
         $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Bienvenue chez Fruits & Veggies');
+        $this->assertSelectorTextContains('h1', 'Bienvenue chez Fruits & Veggies Shop, votre primeur et épicerie fine grenobloise !');
+    }
+
+    #[Test]
+    public function homepageDisplaysWelcomeText(): void
+    {
+        $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $crawler = $this->client->getCrawler();
+        $this->assertStringContainsString('Bienvenue chez Fruits & Veggies Shop, votre primeur et épicerie fine grenobloise !', $crawler->filter('.welcome h1')->text());
+        $this->assertStringContainsString('Nous sommes ravis de vous accueillir pour vous faire découvrir notre sélection de produits frais d\'exception.', $crawler->filter('.welcome p')->text());
+    }
+
+    #[Test]
+    public function homepageDisplaysCategoriesWithProductCount(): void
+    {
+        $fruits = $this->createCategory('Fruits', 'Fruits frais');
+        $legumes = $this->createCategory('Légumes', 'Légumes frais');
+
+        $this->createProduct('Pomme', $fruits);
+        $this->createProduct('Banane', $fruits);
+        $this->createProduct('Orange', $fruits);
+
+        $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('.category-card');
+        $this->assertSelectorTextContains('.category-card:first-child h3', 'Fruits (3)');
+        $this->assertSelectorTextContains('.category-card:last-child h3', 'Légumes (0)');
+    }
+
+    #[Test]
+    public function homepageDisplaysZeroCountForEmptyCategory(): void
+    {
+        $this->createCategory('Fruits', 'Fruits frais');
+
+        $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('.category-card h3', 'Fruits (0)');
+    }
+
+    #[Test]
+    public function homepageSectionsOrder(): void
+    {
+        $category = $this->createCategory('Fruits', 'Fruits frais');
+        $product = $this->createProduct('Pomme', $category);
+        $user = $this->createUser('test@example.com');
+        $this->createOrderWithProduct($user, $product, 5);
+
+        $this->client->request('GET', '/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('.welcome');
+        $this->assertSelectorExists('.top-products');
+        $this->assertSelectorExists('.categories');
+
+        $crawler = $this->client->getCrawler();
+        $content = $crawler->filter('main')->html();
+        $posWelcome = strpos($content, 'Bienvenue');
+        $posTopProducts = strpos($content, 'top-products');
+        $posCategories = strpos($content, 'categories');
+
+        $this->assertNotFalse($posWelcome, 'Welcome text should be present');
+        $this->assertNotFalse($posTopProducts, 'Top products section should be present');
+        $this->assertNotFalse($posCategories, 'Categories section should be present');
+        $this->assertLessThan($posTopProducts, $posWelcome, 'Welcome should appear before top products');
+        $this->assertLessThan($posCategories, $posTopProducts, 'Top products should appear before categories');
     }
 
     #[Test]

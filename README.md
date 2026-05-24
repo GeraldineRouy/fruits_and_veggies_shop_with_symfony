@@ -68,24 +68,42 @@ docker compose exec app php bin/phpunit
 - [Authentification](docs/security/login.md)
 - [Réinitialisation de mot de passe](docs/security/password-reset.md)
 
-## Page d'accueil et top produits
+## Page d'accueil
 
-La page d'accueil affiche les 3 produits les plus commandés via un **contrôleur imbriqué** (Embedded Controller).
+La page d'accueil est organisée en trois sections dans cet ordre :
 
-### Fonctionnement
+1. **Texte de bienvenue** : Message de présentation de la boutique
+2. **Top 3 produits** : Les 3 produits les plus commandés (via contrôleur imbriqué)
+3. **Catégories** : Liste des catégories avec le nombre de produits associés
+
+### Texte de bienvenue
+
+```
+Bienvenue chez Fruits & Veggies Shop, votre primeur et épicerie fine grenobloise !
+Nous sommes ravis de vous accueillir pour vous faire découvrir notre sélection de produits frais d'exception.
+```
+
+### Top produits
+
+Les 3 produits les plus commandés sont affichés via un **contrôleur imbriqué** (Embedded Controller).
 
 - `App\Controller\TopProductsController::topProducts()` interroge `ProductRepository::findTopMostOrdered(3)`
 - La requête DQL agrège les quantités des `OrderLine` pour déterminer les produits les plus populaires
 - Le contrôleur n'a pas de route dédiée : il est appelé uniquement via `render(controller(...))` dans `templates/home/index.html.twig`
 - En l'absence de commandes, la section "Top produits" est masquée
 
-### Contrôleur imbriqué
-
 ```twig
 {{ render(controller('App\\Controller\\TopProductsController::topProducts')) }}
 ```
 
-Ce pattern Symfony permet de déléguer le rendu d'un bloc à un contrôleur dédié, isolant la logique métier du template principal.
+### Catégories
+
+Les catégories de produits sont listées avec le nombre de produits associés :
+
+- Chaque catégorie affiche son nom, sa description et le nombre de produits (ex: "Fruits (5)")
+- Les catégories sont triées par ordre alphabétique
+- Le clic sur une catégorie redirige vers la liste de ses produits (`/boutique/{id}`)
+- En l'absence de catégories, un message informatif est affiché
 
 ## Stack
 

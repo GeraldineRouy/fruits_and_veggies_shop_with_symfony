@@ -19,7 +19,7 @@ class HomeController extends AbstractController
     public function index(): Response
     {
         return $this->render('home/index.html.twig', [
-            'categories' => $this->categoryRepository->findAllOrdered(),
+            'categories' => $this->categoryRepository->findAllWithProductCount(),
         ]);
     }
 }

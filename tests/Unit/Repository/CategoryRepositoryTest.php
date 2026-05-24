@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Repository;
 
 use App\Entity\Category;
+use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
@@ -40,6 +41,45 @@ final class CategoryRepositoryTest extends KernelTestCase
         $this->assertSame('Légumes', $result[2]->getName());
     }
 
+    #[Test]
+    public function findAllWithProductCountReturnsCategoriesWithCounts(): void
+    {
+        $fruits = $this->createCategory('Fruits', 'Fruits frais');
+        $legumes = $this->createCategory('Légumes', 'Légumes frais');
+
+        $this->createProduct('Pomme', $fruits);
+        $this->createProduct('Banane', $fruits);
+        $this->createProduct('Orange', $fruits);
+
+        $result = $this->categoryRepository->findAllWithProductCount();
+
+        $this->assertCount(2, $result);
+        $this->assertSame('Fruits', $result[0]['category']->getName());
+        $this->assertSame(3, $result[0]['productCount']);
+        $this->assertSame('Légumes', $result[1]['category']->getName());
+        $this->assertSame(0, $result[1]['productCount']);
+    }
+
+    #[Test]
+    public function findAllWithProductCountReturnsEmptyArrayWhenNoCategories(): void
+    {
+        $result = $this->categoryRepository->findAllWithProductCount();
+
+        $this->assertSame([], $result);
+    }
+
+    #[Test]
+    public function findAllOrderedRemainsUnchanged(): void
+    {
+        $this->createCategory('Fruits', 'Fruits frais');
+        $this->createCategory('Légumes', 'Légumes frais');
+
+        $result = $this->categoryRepository->findAllOrdered();
+
+        $this->assertCount(2, $result);
+        $this->assertContainsOnlyInstancesOf(Category::class, $result);
+    }
+
     private function createCategory(string $name, string $description): Category
     {
         $category = new Category();
@@ -49,5 +89,19 @@ final class CategoryRepositoryTest extends KernelTestCase
         $this->entityManager->flush();
 
         return $category;
+    }
+
+    private function createProduct(string $name, Category $category): Product
+    {
+        $product = new Product();
+        $product->setName($name);
+        $product->setDescription('Description de ' . $name);
+        $product->setImage(strtolower($name) . '.jpg');
+        $product->setPrice('2.50');
+        $product->addCategory($category);
+        $this->entityManager->persist($product);
+        $this->entityManager->flush();
+
+        return $product;
     }
 }
