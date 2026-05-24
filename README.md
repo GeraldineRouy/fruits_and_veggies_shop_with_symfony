@@ -29,6 +29,19 @@ La page d'accueil est accessible sur [http://localhost:8000](http://localhost:80
 docker compose up -d
 ```
 
+## Compte administrateur par défaut
+
+Après installation et exécution des migrations, un compte administrateur est automatiquement créé :
+
+| Champ | Valeur |
+|-------|--------|
+| Email | `admin@example.com` |
+| Mot de passe | `admin` |
+
+Ce compte possède le rôle `ROLE_ADMIN` et permet d'accéder au dashboard d'administration sur `/admin`.
+
+> ⚠️ **Recommandation de sécurité** : Après votre première connexion, changez le mot de passe de ce compte. Ne conservez pas le mot de passe par défaut en production.
+
 ## Tests
 
 ```bash
