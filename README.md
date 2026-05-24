@@ -192,16 +192,58 @@ Les formulaires de produit incluent la sélection multiple des catégories (rela
 
 ### Données d'exemple
 
-Une migration Doctrine insère des données d'exemple (fruits, légumes, herbes aromatiques) :
+Une migration Doctrine insère des données d'exemple (fruits, légumes, produits régionaux) :
 
 ```bash
-# Exécuter les migrations (déjà fait à l'installation)
 docker compose exec app php bin/console doctrine:migrations:migrate -n
 ```
 
-Données insérées :
-- 5 catégories : Fruits, Légumes, Fruits exotiques, Légumes bio, Herbes aromatiques
-- 15 produits avec associations aux catégories
+#### Catégories
+
+| Nom | Description |
+|-----|-------------|
+| Fruits | Fruits frais de saison |
+| Légumes | Légumes frais de saison |
+| Fruits exotiques | Fruits tropicaux et exotiques |
+| Herbes aromatiques | Herbes et plantes aromatiques |
+| Produits locaux d'exception | Produits régionaux d'exception de nos terroirs |
+
+#### Produits
+
+| Nom | Unité d'achat | Catégories |
+|-----|---------------|------------|
+| Pomme Golden | au kilogramme | Fruits |
+| Banane | au kilogramme | Fruits, Fruits exotiques |
+| Orange | au kilogramme | Fruits |
+| Fraise | barquette de 250g | Fruits |
+| Avocat | à la pièce | Fruits exotiques, Légumes |
+| Mangue | à la pièce | Fruits exotiques |
+| Carotte | au kilogramme | Légumes |
+| Salade | au kilogramme | Légumes |
+| Tomate | au kilogramme | Légumes |
+| Concombre | au kilogramme | Légumes |
+| Courgette | au kilogramme | Légumes |
+| Basilic | au bouquet | Herbes aromatiques |
+| Menthe | au bouquet | Herbes aromatiques |
+| Persil | au bouquet | Herbes aromatiques |
+| Ananas | à la pièce | Fruits exotiques |
+| Noix de Grenoble AOC | au kilogramme | Produits locaux d'exception |
+| Huile de noix de Grenoble AOC | à la bouteille | Produits locaux d'exception |
+| Fromage Bleu du Vercors-Sassenage | à la pièce | Produits locaux d'exception |
+| Fromage Saint-Marcellin | à la pièce | Produits locaux d'exception |
+| Chocolat Bonnat | à la pièce | Produits locaux d'exception |
+
+#### Unités d'achat
+
+Les produits sont vendus selon différentes unités d'achat, précisées dans leur description :
+
+| Unité | Exemples de produits |
+|-------|---------------------|
+| À la pièce | Avocat, Mangue, Ananas, Saint-Marcellin, Bleu du Vercors, Chocolat Bonnat |
+| Au bouquet | Basilic, Menthe, Persil |
+| En barquette de 250g | Fraise |
+| Au kilogramme | Pomme Golden, Banane, Orange, Carotte, Tomate, Noix de Grenoble |
+| À la bouteille | Huile de noix de Grenoble AOC |
 
 ## Commandes console
 
