@@ -122,6 +122,33 @@ Méthodes principales :
 - `getTotal(User) : string` : Calcule le total
 - `getProductCount(User) : int` : Compte les articles
 
+## Administration des utilisateurs
+
+L'interface d'administration permet aux administrateurs de gérer les comptes utilisateurs.
+
+### Routes
+
+| Méthode | Route | Description |
+|---------|-------|-------------|
+| GET | `/admin/utilisateurs` | Liste paginée des utilisateurs |
+| POST | `/admin/utilisateur/{id}/toggle` | Désactiver/réactiver un compte |
+
+### Comportement
+
+- Un administrateur peut désactiver ou réactiver n'importe quel utilisateur sauf lui-même
+- Un utilisateur désactivé est automatiquement déconnecté lors de sa prochaine requête
+- Un utilisateur désactivé ne peut pas se reconnecter
+
+## Commandes console
+
+| Commande | Description |
+|---|---|
+| `bin/console app:users:purge-inactive` | Supprime les comptes inactifs depuis plus de 2 ans |
+| `bin/console app:users:purge-inactive --dry-run` | Simule la suppression sans modifier la base |
+| `bin/console app:users:purge-unverified` | Supprime les comptes non validés après 7 jours |
+| `bin/console app:users:purge-unverified --dry-run` | Simule la suppression sans modifier la base |
+| `bin/console app:orders:list-stalled` | Liste les commandes non livrées depuis plus de 7 jours |
+
 ## Inscription et connexion
 
 | Route | Description |

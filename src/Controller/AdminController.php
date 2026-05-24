@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\User;
 use App\Enum\OrderStatus;
 use App\Repository\OrderRepository;
+use App\Repository\UserRepository;
 use App\Service\OrderService;
 use App\Service\PaginationService;
+use App\Service\UserService;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -118,5 +121,38 @@ class AdminController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin_order_detail', ['id' => $order->getId()]);
+    }
+
+    #[Route('/utilisateurs', name: 'app_admin_users', methods: ['GET'])]
+    public function users(
+        Request $request,
+        UserRepository $userRepository,
+        PaginationService $paginationService,
+    ): Response {
+        $page = max(1, (int) $request->query->get('page', '1'));
+
+        $qb = $userRepository->createPaginatedQueryBuilder();
+        $pagination = $paginationService->paginateQuery($qb, $page, 20);
+
+        return $this->render('admin/users.html.twig', [
+            'pagination' => $pagination,
+        ]);
+    }
+
+    #[Route('/utilisateur/{id}/toggle', name: 'app_admin_user_toggle', methods: ['POST'])]
+    public function toggleUser(User $user, UserService $userService): Response
+    {
+        if ($user === $this->getUser()) {
+            $this->addFlash('error', 'Vous ne pouvez pas modifier votre propre statut.');
+
+            return $this->redirectToRoute('app_admin_users');
+        }
+
+        $userService->deactivateUser($user);
+
+        $status = $user->isActive() ? 'réactivé' : 'désactivé';
+        $this->addFlash('success', "L'utilisateur " . $user->getEmail() . " a été " . $status . ".");
+
+        return $this->redirectToRoute('app_admin_users');
     }
 }

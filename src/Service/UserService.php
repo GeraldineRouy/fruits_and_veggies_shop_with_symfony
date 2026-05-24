@@ -104,6 +104,15 @@ class UserService
         return $user;
     }
 
+    public function deactivateUser(User $user): User
+    {
+        $user->setIsActive(!$user->isActive());
+
+        $this->entityManager->flush();
+
+        return $user;
+    }
+
     private function generateToken(): string
     {
         return bin2hex(random_bytes(32));

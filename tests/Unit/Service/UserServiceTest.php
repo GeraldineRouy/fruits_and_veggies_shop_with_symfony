@@ -252,4 +252,36 @@ final class UserServiceTest extends TestCase
         $this->assertNotNull($token);
         $this->assertSame(64, strlen($token));
     }
+
+    #[Test]
+    public function deactivateUserTogglesActiveToFalse(): void
+    {
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->once())->method('flush');
+
+        $service = $this->createService(entityManager: $entityManager);
+
+        $user = new User();
+        $user->setIsActive(true);
+
+        $service->deactivateUser($user);
+
+        $this->assertFalse($user->isActive());
+    }
+
+    #[Test]
+    public function deactivateUserTogglesInactiveToTrue(): void
+    {
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->once())->method('flush');
+
+        $service = $this->createService(entityManager: $entityManager);
+
+        $user = new User();
+        $user->setIsActive(false);
+
+        $service->deactivateUser($user);
+
+        $this->assertTrue($user->isActive());
+    }
 }
