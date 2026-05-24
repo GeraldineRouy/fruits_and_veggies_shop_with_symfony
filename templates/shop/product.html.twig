@@ -3,30 +3,38 @@
 {% block title %}{{ product.name }} - Fruits & Veggies{% endblock %}
 
 {% block body %}
-    <article class="product-detail">
-        <img src="{{ asset(product.image) }}" alt="{{ product.name }}" class="product-detail__image">
-        <div class="product-detail__info">
-            <h1>{{ product.name }}</h1>
-            <p class="price">{{ product.price|format_currency('EUR') }}</p>
-            <p>{{ product.description }}</p>
-            <p class="categories">
-                Catégories :
-                {% for category in product.categories %}
-                    <a href="{{ path('app_shop_category', { id: category.id }) }}">{{ category.name }}</a>
-                    {%- if not loop.last %}, {% endif %}
-                {% endfor %}
-            </p>
-            {% if app.user %}
-                <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="add-to-cart-form">
-                    <input type="hidden" name="add_to_cart[_token]" value="{{ csrf_token('add_to_cart') }}">
-                    <label for="add_to_cart_quantity">Quantité :</label>
-                    <input type="number" id="add_to_cart_quantity" name="add_to_cart[quantity]" value="1" min="1">
-                    <button type="submit" class="btn">Ajouter au panier</button>
-                </form>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="btn">Connectez-vous pour acheter</a>
-            {% endif %}
-            <a href="{{ path('app_shop_category', { id: product.categories.first.id }) }}" class="back-link">← Retour à la catégorie</a>
+    <article class="product-detail bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="md:flex">
+            <div class="md:w-1/2 bg-gray-100">
+                <img src="{{ asset(product.image) }}" alt="{{ product.name }}" class="product-detail__image w-full h-96 object-cover">
+            </div>
+            <div class="md:w-1/2 p-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ product.name }}</h1>
+                <p class="price text-3xl font-bold text-brand-600 mb-6">{{ product.price|format_currency('EUR') }}</p>
+                <p class="text-gray-600 mb-4 leading-relaxed">{{ product.description }}</p>
+                <p class="categories text-sm text-gray-500 mb-6">
+                    Catégories :
+                    {% for category in product.categories %}
+                        <a href="{{ path('app_shop_category', { id: category.id }) }}" class="text-brand-600 hover:text-brand-800 underline">{{ category.name }}</a>
+                        {%- if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                {% if app.user %}
+                    <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="add-to-cart-form flex items-end space-x-4 mb-6">
+                        <input type="hidden" name="add_to_cart[_token]" value="{{ csrf_token('add_to_cart') }}">
+                        <div>
+                            <label for="add_to_cart_quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantité :</label>
+                            <input type="number" id="add_to_cart_quantity" name="add_to_cart[quantity]" value="1" min="1" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-brand-500 focus:border-brand-500">
+                        </div>
+                        <button type="submit" class="btn bg-brand-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-brand-700 transition-colors">Ajouter au panier</button>
+                    </form>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn inline-block bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors mb-6">Connectez-vous pour acheter</a>
+                {% endif %}
+                <div class="pt-4 border-t border-gray-200">
+                    <a href="{{ path('app_shop_category', { id: product.categories.first.id }) }}" class="back-link text-brand-600 hover:text-brand-800 transition-colors">&larr; Retour à la catégorie</a>
+                </div>
+            </div>
         </div>
     </article>
 {% endblock %}

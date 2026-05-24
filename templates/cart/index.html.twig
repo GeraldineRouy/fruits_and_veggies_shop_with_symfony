@@ -3,41 +3,43 @@
 {% block title %}Mon panier - Fruits & Veggies{% endblock %}
 
 {% block body %}
-    <h1>Mon panier</h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Mon panier</h1>
 
     {% if items|length > 0 %}
-        <div class="cart-items">
-            <table>
-                <thead>
+        <div class="cart-items bg-white rounded-xl shadow-md overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <th>Produit</th>
-                        <th>Prix unitaire</th>
-                        <th>Quantité</th>
-                        <th>Total</th>
-                        <th>Actions</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Produit</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Prix unitaire</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Quantité</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Total</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-200">
                     {% for item in items %}
                         {% include 'cart/_product_row.html.twig' with { item: item } %}
                     {% endfor %}
                 </tbody>
             </table>
 
-            <div class="cart-summary">
-                <p class="cart-total"><strong>Total :</strong> {{ total|format_currency('EUR') }}</p>
-
-                <form method="post" action="{{ path('app_order_checkout') }}" style="display: inline;">
-                    <button type="submit" class="btn btn-success">Valider la commande</button>
-                </form>
-
-                <form method="post" action="{{ path('app_cart_clear') }}" onsubmit="return confirm('Vider le panier ?');" style="display: inline;">
-                    <button type="submit" class="btn btn-danger">Vider le panier</button>
-                </form>
+            <div class="cart-summary p-6 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <p class="cart-total text-xl font-bold text-gray-800">Total : <span class="text-brand-600">{{ total|format_currency('EUR') }}</span></p>
+                <div class="flex space-x-3">
+                    <form method="post" action="{{ path('app_order_checkout') }}">
+                        <button type="submit" class="btn btn-success bg-brand-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-brand-700 transition-colors">Valider la commande</button>
+                    </form>
+                    <form method="post" action="{{ path('app_cart_clear') }}" onsubmit="return confirm('Vider le panier ?');">
+                        <button type="submit" class="btn btn-danger bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors">Vider le panier</button>
+                    </form>
+                </div>
             </div>
         </div>
     {% else %}
-        <p>Votre panier est vide.</p>
-        <a href="{{ path('app_home') }}" class="btn">Découvrir nos produits</a>
+        <div class="text-center py-12">
+            <p class="text-gray-600 mb-4">Votre panier est vide.</p>
+            <a href="{{ path('app_home') }}" class="btn inline-block bg-brand-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-brand-700 transition-colors">Découvrir nos produits</a>
+        </div>
     {% endif %}
 {% endblock %}

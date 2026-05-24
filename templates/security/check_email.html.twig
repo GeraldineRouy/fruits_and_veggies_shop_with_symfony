@@ -3,12 +3,14 @@
 {% block title %}Vérifiez vos emails{% endblock %}
 
 {% block body %}
-<div class="check-email-container">
-    <h1>Vérifiez vos emails</h1>
+<div class="check-email-container max-w-md mx-auto mt-10">
+    <div class="bg-white rounded-xl shadow-md p-8 text-center">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Vérifiez vos emails</h1>
 
-    <p>Un email de validation vous a été envoyé à <strong>{{ email }}</strong>.</p>
-    <p>Cliquez sur le lien dans l'email pour activer votre compte.</p>
+        <p class="text-gray-600 mb-4">Un email de validation vous a été envoyé à <strong>{{ email }}</strong>.</p>
+        <p class="text-gray-600 mb-6">Cliquez sur le lien dans l'email pour activer votre compte.</p>
 
-    <a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a>
+        <a href="{{ path('app_login') }}" class="btn btn-primary inline-block bg-brand-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-brand-700 transition-colors">Se connecter</a>
+    </div>
 </div>
 {% endblock %}

@@ -3,24 +3,30 @@
 {% block title %}Boutique - {{ category.name }} - Fruits & Veggies{% endblock %}
 
 {% block body %}
-    <h1>{{ category.name }}</h1>
-    <p>{{ category.description }}</p>
+    <h1 class="text-2xl font-bold text-gray-800 mb-2">{{ category.name }}</h1>
+    <p class="text-gray-600 mb-6">{{ category.description }}</p>
 
     {% if pagination.items|length > 0 %}
-        <div class="products-grid">
+        <div class="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {% for product in pagination.items %}
-                <div class="product-card">
-                    <a href="{{ path('app_shop_product', { id: product.id }) }}">
-                        <img src="{{ asset(product.image) }}" alt="{{ product.name }}" loading="lazy">
-                        <h3>{{ product.name }}</h3>
-                        <p class="price">{{ product.price|format_currency('EUR') }}</p>
+                <div class="product-card bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col">
+                    <a href="{{ path('app_shop_product', { id: product.id }) }}" class="block">
+                        <div class="bg-gray-100">
+                            <img src="{{ asset(product.image) }}" alt="Image de {{ product.name }}" loading="lazy" class="w-full h-48 object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ product.name }}</h3>
+                            <p class="price text-xl font-bold text-brand-600">{{ product.price|format_currency('EUR') }}</p>
+                        </div>
                     </a>
                     {% if app.user %}
-                        <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="add-to-cart-list">
-                            <input type="hidden" name="add_to_cart[_token]" value="{{ csrf_token('add_to_cart') }}">
-                            <input type="hidden" name="add_to_cart[quantity]" value="1">
-                            <button type="submit" class="btn btn-sm">Ajouter au panier</button>
-                        </form>
+                        <div class="px-4 pb-4 mt-auto">
+                            <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="add-to-cart-list">
+                                <input type="hidden" name="add_to_cart[_token]" value="{{ csrf_token('add_to_cart') }}">
+                                <input type="hidden" name="add_to_cart[quantity]" value="1">
+                                <button type="submit" class="btn btn-sm w-full bg-brand-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-700 transition-colors">Ajouter au panier</button>
+                            </form>
+                        </div>
                     {% endif %}
                 </div>
             {% endfor %}
@@ -31,6 +37,6 @@
             categoryId: category.id
         } %}
     {% else %}
-        <p>Aucun produit dans cette catégorie pour le moment.</p>
+        <p class="text-gray-600 text-center py-12">Aucun produit dans cette catégorie pour le moment.</p>
     {% endif %}
 {% endblock %}

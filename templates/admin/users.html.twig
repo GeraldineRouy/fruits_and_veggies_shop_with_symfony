@@ -3,65 +3,68 @@
 {% block title %}Gestion des utilisateurs - Administration{% endblock %}
 
 {% block body %}
-    <h1>Gestion des utilisateurs</h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Gestion des utilisateurs</h1>
 
     {% if pagination.items|length > 0 %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Prénom</th>
-                    <th>Nom</th>
-                    <th>Inscrit le</th>
-                    <th>Dernière connexion</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in pagination.items %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <table class="min-w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.firstName }}</td>
-                        <td>{{ user.lastName }}</td>
-                        <td>{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '-' }}</td>
-                        <td>{{ user.lastLoginAt ? user.lastLoginAt|date('d/m/Y H:i') : 'Jamais' }}</td>
-                        <td>
-                            {% if user.isActive %}
-                                <span class="badge badge-active">Actif</span>
-                            {% else %}
-                                <span class="badge badge-inactive">Désactivé</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if app.user.id != user.id %}
-                                <form method="post" action="{{ path('app_admin_user_toggle', {id: user.id}) }}" style="display:inline">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('toggle-user-' ~ user.id) }}">
-                                    <button type="submit" class="btn btn-sm {{ user.isActive ? 'btn-warning' : 'btn-success' }}">
-                                        {{ user.isActive ? 'Désactiver' : 'Réactiver' }}
-                                    </button>
-                                </form>
-                            {% else %}
-                                <span class="text-muted">Non modifiable</span>
-                            {% endif %}
-                        </td>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Email</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Prénom</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Nom</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Inscrit le</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Dernière connexion</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Statut</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Actions</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for user in pagination.items %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-4 py-3 text-gray-800">{{ user.email }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ user.firstName }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ user.lastName }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '-' }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ user.lastLoginAt ? user.lastLoginAt|date('d/m/Y H:i') : 'Jamais' }}</td>
+                            <td class="px-4 py-3">
+                                {% if user.isActive %}
+                                    <span class="badge badge-active inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Actif</span>
+                                {% else %}
+                                    <span class="badge badge-inactive inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">Désactivé</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3">
+                                {% if app.user.id != user.id %}
+                                    <form method="post" action="{{ path('app_admin_user_toggle', {id: user.id}) }}" style="display:inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('toggle-user-' ~ user.id) }}">
+                                        <button type="submit" class="btn btn-sm {{ user.isActive ? 'btn-warning' : 'btn-success' }} px-3 py-1 rounded-lg text-sm font-medium transition-colors
+                                            {{ user.isActive ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' : 'bg-green-100 text-green-800 hover:bg-green-200' }}">
+                                            {{ user.isActive ? 'Désactiver' : 'Réactiver' }}
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span class="text-muted text-gray-400 text-sm">Non modifiable</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-        <div class="pagination">
+        <div class="pagination flex items-center justify-center space-x-4 mt-6 text-gray-600 text-sm">
             {% if pagination.hasPrevious %}
-                <a href="{{ path('app_admin_users', {page: pagination.currentPage - 1}) }}">← Précédente</a>
+                <a href="{{ path('app_admin_users', {page: pagination.currentPage - 1}) }}" class="px-3 py-1 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700">&larr; Précédente</a>
             {% endif %}
 
             <span>Page {{ pagination.currentPage }} / {{ pagination.totalPages }}</span>
 
             {% if pagination.hasNext %}
-                <a href="{{ path('app_admin_users', {page: pagination.currentPage + 1}) }}">Suivante →</a>
+                <a href="{{ path('app_admin_users', {page: pagination.currentPage + 1}) }}" class="px-3 py-1 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700">Suivante &rarr;</a>
             {% endif %}
         </div>
     {% else %}
-        <p>Aucun utilisateur.</p>
+        <p class="text-gray-600 text-center py-12">Aucun utilisateur.</p>
     {% endif %}
 {% endblock %}

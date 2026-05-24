@@ -3,16 +3,18 @@
 {% block title %}Accueil - Fruits & Veggies{% endblock %}
 
 {% block body %}
-    <h1>Bienvenue chez Fruits & Veggies</h1>
-    <p>Votre magasin de fruits et légumes frais en ligne.</p>
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Bienvenue chez Fruits &amp; Veggies</h1>
+        <p class="text-xl text-gray-600">Votre magasin de fruits et légumes frais en ligne.</p>
+    </div>
 
-    <section class="categories">
-        <h2>Nos produits par catégories</h2>
-        <div class="categories-grid">
+    <section class="categories mb-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Nos produits par catégories</h2>
+        <div class="categories-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for category in categories %}
-                <a href="{{ path('app_shop_category', { id: category.id }) }}" class="category-card">
-                    <h3>{{ category.name }}</h3>
-                    <p>{{ category.description }}</p>
+                <a href="{{ path('app_shop_category', { id: category.id }) }}" class="category-card bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 border border-gray-100 hover:border-brand-200">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ category.name }}</h3>
+                    <p class="text-gray-600 text-sm">{{ category.description }}</p>
                 </a>
             {% endfor %}
         </div>

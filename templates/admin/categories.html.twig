@@ -3,48 +3,50 @@
 {% block title %}Gestion des catégories - Administration{% endblock %}
 
 {% block body %}
-    <h1>Gestion des catégories</h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Gestion des catégories</h1>
 
-    <a href="{{ path('app_admin_category_new') }}" class="btn btn-primary">Nouvelle catégorie</a>
+    <a href="{{ path('app_admin_category_new') }}" class="btn btn-primary bg-brand-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-700 transition-colors inline-block mb-4">Nouvelle catégorie</a>
 
     {% if pagination.items|length > 0 %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for category in pagination.items %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <table class="min-w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <td>{{ category.name }}</td>
-                        <td>{{ category.description }}</td>
-                        <td>
-                            <a href="{{ path('app_admin_category_edit', {id: category.id}) }}">Modifier</a>
-                            <form method="post" action="{{ path('app_admin_category_delete', {id: category.id}) }}" style="display:inline" onsubmit="return confirm('Supprimer la catégorie « {{ category.name }} » ?');">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete-category-' ~ category.id) }}">
-                                <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
-                            </form>
-                        </td>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Nom</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Description</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Actions</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for category in pagination.items %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-4 py-3 font-medium text-gray-800">{{ category.name }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ category.description }}</td>
+                            <td class="px-4 py-3">
+                                <a href="{{ path('app_admin_category_edit', {id: category.id}) }}" class="text-brand-600 hover:text-brand-800 font-medium">Modifier</a>
+                                <form method="post" action="{{ path('app_admin_category_delete', {id: category.id}) }}" style="display:inline" onsubmit="return confirm('Supprimer la catégorie « {{ category.name }} » ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete-category-' ~ category.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-danger ml-2 px-3 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-        <div class="pagination">
+        <div class="pagination flex items-center justify-center space-x-4 mt-6 text-gray-600 text-sm">
             {% if pagination.hasPrevious %}
-                <a href="{{ path('app_admin_categories', {page: pagination.currentPage - 1}) }}">← Précédente</a>
+                <a href="{{ path('app_admin_categories', {page: pagination.currentPage - 1}) }}" class="px-3 py-1 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700">&larr; Précédente</a>
             {% endif %}
 
             <span>Page {{ pagination.currentPage }} / {{ pagination.totalPages }}</span>
 
             {% if pagination.hasNext %}
-                <a href="{{ path('app_admin_categories', {page: pagination.currentPage + 1}) }}">Suivante →</a>
+                <a href="{{ path('app_admin_categories', {page: pagination.currentPage + 1}) }}" class="px-3 py-1 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700">Suivante &rarr;</a>
             {% endif %}
         </div>
     {% else %}
-        <p>Aucune catégorie pour le moment.</p>
+        <p class="text-gray-600 text-center py-12">Aucune catégorie pour le moment.</p>
     {% endif %}
 {% endblock %}

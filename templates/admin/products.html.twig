@@ -3,60 +3,71 @@
 {% block title %}Gestion des produits - Administration{% endblock %}
 
 {% block body %}
-    <h1>Gestion des produits</h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Gestion des produits</h1>
 
-    <a href="{{ path('app_admin_product_new') }}" class="btn btn-primary">Nouveau produit</a>
+    <a href="{{ path('app_admin_product_new') }}" class="btn btn-primary bg-brand-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-700 transition-colors inline-block mb-4">Nouveau produit</a>
 
     {% if pagination.items|length > 0 %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Nom</th>
-                    <th>Prix</th>
-                    <th>Catégories</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product in pagination.items %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <table class="min-w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <td>
-                            <img src="{{ asset(product.image) }}" alt="{{ product.name }}" style="width:50px;height:50px;object-fit:cover;">
-                        </td>
-                        <td>{{ product.name }}</td>
-                        <td>{{ product.price|format_currency('EUR') }}</td>
-                        <td>
-                            {% for category in product.categories %}
-                                <span class="badge">{{ category.name }}{{ not loop.last ? ',' }}</span>
-                            {% else %}
-                                <span class="text-muted">—</span>
-                            {% endfor %}
-                        </td>
-                        <td>
-                            <a href="{{ path('app_admin_product_edit', {id: product.id}) }}">Modifier</a>
-                            <form method="post" action="{{ path('app_admin_product_delete', {id: product.id}) }}" style="display:inline" onsubmit="return confirm('Supprimer le produit « {{ product.name }} » ?');">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete-product-' ~ product.id) }}">
-                                <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
-                            </form>
-                        </td>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Image</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Nom</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Prix</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Catégories</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Actions</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for product in pagination.items %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-4 py-3">
+                                <img src="{{ asset(product.image) }}" alt="{{ product.name }}" style="width:50px;height:50px;object-fit:cover;" class="rounded-lg">
+                            </td>
+                            <td class="px-4 py-3 font-medium text-gray-800">{{ product.name }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ product.price|format_currency('EUR') }}</td>
+                            <td class="px-4 py-3">
+                                {% for category in product.categories %}
+                                    {% set catColors = {
+                                        'Fruits': 'bg-green-100 text-green-800',
+                                        'Légumes': 'bg-orange-100 text-orange-800',
+                                        'Fruits exotiques': 'bg-yellow-100 text-yellow-800',
+                                        'Herbes aromatiques': 'bg-purple-100 text-purple-800',
+                                        'Produits locaux d\'exception': 'bg-blue-100 text-blue-800',
+                                    } %}
+                                    {% set colorClass = catColors[category.name] ?? 'bg-gray-100 text-gray-700' %}
+                                    <span class="badge inline-block px-2 py-1 rounded text-xs font-medium {{ colorClass }}">{{ category.name }}</span>
+                                    {%- if not loop.last %}, {% endif %}
+                                {% else %}
+                                    <span class="text-gray-400 text-sm">—</span>
+                                {% endfor %}
+                            </td>
+                            <td class="px-4 py-3">
+                                <a href="{{ path('app_admin_product_edit', {id: product.id}) }}" class="text-brand-600 hover:text-brand-800 font-medium">Modifier</a>
+                                <form method="post" action="{{ path('app_admin_product_delete', {id: product.id}) }}" style="display:inline" onsubmit="return confirm('Supprimer le produit « {{ product.name }} » ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete-product-' ~ product.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-danger ml-2 px-3 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-        <div class="pagination">
+        <div class="pagination flex items-center justify-center space-x-4 mt-6 text-gray-600 text-sm">
             {% if pagination.hasPrevious %}
-                <a href="{{ path('app_admin_products', {page: pagination.currentPage - 1}) }}">← Précédente</a>
+                <a href="{{ path('app_admin_products', {page: pagination.currentPage - 1}) }}" class="px-3 py-1 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700">&larr; Précédente</a>
             {% endif %}
 
             <span>Page {{ pagination.currentPage }} / {{ pagination.totalPages }}</span>
 
             {% if pagination.hasNext %}
-                <a href="{{ path('app_admin_products', {page: pagination.currentPage + 1}) }}">Suivante →</a>
+                <a href="{{ path('app_admin_products', {page: pagination.currentPage + 1}) }}" class="px-3 py-1 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700">Suivante &rarr;</a>
             {% endif %}
         </div>
     {% else %}
-        <p>Aucun produit pour le moment.</p>
+        <p class="text-gray-600 text-center py-12">Aucun produit pour le moment.</p>
     {% endif %}
 {% endblock %}

@@ -97,4 +97,19 @@ class CartController extends AbstractController
 
         return $this->redirectToRoute('app_cart_index');
     }
+
+    #[Route('/preview', name: 'app_cart_preview', methods: ['GET'])]
+    public function preview(CartService $cartService): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $user = $this->getUser();
+        $cart = $cartService->getOrCreateCart($user);
+        $items = $cart->getItems();
+
+        return $this->render('cart/_preview.html.twig', [
+            'items' => $items,
+            'total' => $cartService->getTotal($user),
+            'count' => $cartService->getProductCount($user),
+        ]);
+    }
 }

@@ -1,13 +1,13 @@
 {% if pagination.totalPages > 1 %}
-    <nav class="pagination" aria-label="Pagination">
+    <nav class="pagination flex items-center justify-center space-x-4 mt-8" aria-label="Pagination">
         {% if pagination.hasPrevious %}
-            <a href="{{ path('app_shop_category', { id: categoryId, page: pagination.currentPage - 1 }) }}" class="pagination__prev" aria-label="Page précédente">← Précédent</a>
+            <a href="{{ path('app_shop_category', { id: categoryId, page: pagination.currentPage - 1 }) }}" class="pagination__prev px-4 py-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700" aria-label="Page précédente">&larr; Précédent</a>
         {% endif %}
 
-        <span class="pagination__info">Page {{ pagination.currentPage }} sur {{ pagination.totalPages }}</span>
+        <span class="pagination__info text-gray-600 text-sm">Page {{ pagination.currentPage }} sur {{ pagination.totalPages }}</span>
 
         {% if pagination.hasNext %}
-            <a href="{{ path('app_shop_category', { id: categoryId, page: pagination.currentPage + 1 }) }}" class="pagination__next" aria-label="Page suivante">Suivant →</a>
+            <a href="{{ path('app_shop_category', { id: categoryId, page: pagination.currentPage + 1 }) }}" class="pagination__next px-4 py-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700" aria-label="Page suivante">Suivant &rarr;</a>
         {% endif %}
     </nav>
 {% endif %}

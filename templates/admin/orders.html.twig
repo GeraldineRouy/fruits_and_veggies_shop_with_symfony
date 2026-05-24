@@ -3,46 +3,59 @@
 {% block title %}Gestion des commandes - Administration{% endblock %}
 
 {% block body %}
-    <h1>Gestion des commandes</h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Gestion des commandes</h1>
 
     {% if ordersData|length > 0 %}
-        <table>
-            <thead>
-                <tr>
-                    <th>N°</th>
-                    <th>Client</th>
-                    <th>Date</th>
-                    <th>Statut</th>
-                    <th>Total</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for orderData in ordersData %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <table class="min-w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <td>#{{ orderData.order.id }}</td>
-                        <td>{{ orderData.order.user.email }}</td>
-                        <td>{{ orderData.order.orderedAt|date('d/m/Y H:i') }}</td>
-                        <td><span class="badge badge-{{ orderData.order.status.value }}">{{ status_labels[orderData.order.status.value] }}</span></td>
-                        <td>{{ orderData.total|format_currency('EUR') }}</td>
-                        <td><a href="{{ path('app_admin_order_detail', {id: orderData.order.id}) }}">Voir</a></td>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">N°</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Client</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Date</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Statut</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Total</th>
+                        <th class="text-left px-4 py-3 text-sm font-semibold text-gray-600">Actions</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for orderData in ordersData %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-4 py-3 font-medium text-gray-800">#{{ orderData.order.id }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ orderData.order.user.email }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ orderData.order.orderedAt|date('d/m/Y H:i') }}</td>
+                            <td class="px-4 py-3">
+                                <span class="badge badge-{{ orderData.order.status.value }} inline-block px-3 py-1 rounded-full text-sm font-semibold
+                                    {% if orderData.order.status.value == 'confirmed' %}bg-yellow-100 text-yellow-800
+                                    {% elseif orderData.order.status.value == 'preparing' %}bg-blue-100 text-blue-800
+                                    {% elseif orderData.order.status.value == 'shipped' %}bg-purple-100 text-purple-800
+                                    {% elseif orderData.order.status.value == 'delivered' %}bg-green-100 text-green-800
+                                    {% elseif orderData.order.status.value == 'cancelled' %}bg-red-100 text-red-800
+                                    {% else %}bg-gray-100 text-gray-700
+                                    {% endif %}">{{ status_labels[orderData.order.status.value] }}</span>
+                            </td>
+                            <td class="px-4 py-3 text-gray-700">{{ orderData.total|format_currency('EUR') }}</td>
+                            <td class="px-4 py-3">
+                                <a href="{{ path('app_admin_order_detail', {id: orderData.order.id}) }}" class="text-brand-600 hover:text-brand-800 font-medium">Voir</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-        <div class="pagination">
+        <div class="pagination flex items-center justify-center space-x-4 mt-6 text-gray-600 text-sm">
             {% if pagination.hasPrevious %}
-                <a href="{{ path('app_admin_orders', {page: pagination.currentPage - 1}) }}">← Précédente</a>
+                <a href="{{ path('app_admin_orders', {page: pagination.currentPage - 1}) }}" class="px-3 py-1 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700">&larr; Précédente</a>
             {% endif %}
 
             <span>Page {{ pagination.currentPage }} / {{ pagination.totalPages }}</span>
 
             {% if pagination.hasNext %}
-                <a href="{{ path('app_admin_orders', {page: pagination.currentPage + 1}) }}">Suivante →</a>
+                <a href="{{ path('app_admin_orders', {page: pagination.currentPage + 1}) }}" class="px-3 py-1 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700">Suivante &rarr;</a>
             {% endif %}
         </div>
     {% else %}
-        <p>Aucune commande pour le moment.</p>
+        <p class="text-gray-600 text-center py-12">Aucune commande pour le moment.</p>
     {% endif %}
 {% endblock %}

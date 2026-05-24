@@ -97,6 +97,70 @@ Ce pattern Symfony permet de déléguer le rendu d'un bloc à un contrôleur dé
 - **Messaging** : Symfony Messenger (Doctrine transport)
 - **Email** : Symfony Mailer (Mailpit en dev)
 
+## Style CSS avec Tailwind
+
+Le projet utilise **Tailwind CSS** pour le style, intégré via CDN.
+
+### Intégration
+
+Tailwind CSS est chargé via CDN dans `templates/base.html.twig` :
+
+```html
+<script src="https://cdn.tailwindcss.com"></script>
+```
+
+### Configuration
+
+La configuration Tailwind est définie inline dans le layout :
+
+```html
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    brand: {
+                        50: '#e8f5e9',
+                        100: '#c8e6c9',
+                        200: '#a5d6a7',
+                        300: '#81c784',
+                        400: '#66bb6a',
+                        500: '#4caf50',
+                        600: '#43a047',
+                        700: '#388e3c',
+                        800: '#2e7d32',
+                        900: '#1b5e20',
+                    }
+                }
+            }
+        }
+    }
+</script>
+```
+
+### Palette de couleurs
+
+| Token | Usage |
+|-------|-------|
+| `brand-600` | Boutons principaux, prix, liens |
+| `brand-700` | Header, footer |
+| `brand-800` | Footer copyright |
+| `brand-200` | Texte secondaire sur fond sombre |
+
+### Composants stylisés
+
+Les composants suivants utilisent exclusivement des classes utilitaires Tailwind :
+
+- **Header/Navbar** : fond `bg-brand-700`, menu responsive avec hamburger
+- **Footer** : 3 colonnes (à propos, liens, contact), copyright
+- **Cartes produits** : `bg-white rounded-xl shadow-md hover:shadow-lg`
+- **Cartes catégories** : `bg-white rounded-xl shadow-md p-6`
+- **Pages d'auth** : carte centrée `max-w-md mx-auto`
+- **Tableaux** : `bg-white rounded-xl shadow-md overflow-hidden`
+- **Badges de statut** : couleurs conditionnelles (yellow/blue/purple/green/red)
+- **Messages flash** : fonds colorés avec bordure
+- **Aperçu panier** : dropdown `bg-white rounded-xl shadow-xl` au survol de l'icône panier
+
 ## Email
 
 L'environnement Docker utilise **Mailpit** pour les emails en développement.

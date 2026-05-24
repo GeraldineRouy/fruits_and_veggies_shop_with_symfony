@@ -3,26 +3,22 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-<div class="register-container">
-    <h1>Inscription</h1>
+<div class="register-container max-w-md mx-auto mt-10">
+    <div class="bg-white rounded-xl shadow-md p-8">
+        <h1 class="text-2xl font-bold text-gray-800 text-center mb-6">Inscription</h1>
 
-    {% for label, messages in app.flashes(['error']) %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}">{{ message }}</div>
-        {% endfor %}
-    {% endfor %}
+        {{ form_start(form, {attr: {class: 'space-y-4'}}) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.lastName) }}
+            {{ form_row(form.plainPassword) }}
 
-    {{ form_start(form) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.firstName) }}
-        {{ form_row(form.lastName) }}
-        {{ form_row(form.plainPassword) }}
+            <button type="submit" class="btn btn-primary w-full bg-brand-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-700 transition-colors">Créer mon compte</button>
+        {{ form_end(form) }}
 
-        <button type="submit" class="btn btn-primary">Créer mon compte</button>
-    {{ form_end(form) }}
-
-    <p class="login-links">
-        <a href="{{ path('app_login') }}">Déjà un compte ? Se connecter</a>
-    </p>
+        <p class="login-links mt-4 text-center text-sm text-gray-600">
+            <a href="{{ path('app_login') }}" class="text-brand-600 hover:text-brand-800">Déjà un compte ? Se connecter</a>
+        </p>
+    </div>
 </div>
 {% endblock %}

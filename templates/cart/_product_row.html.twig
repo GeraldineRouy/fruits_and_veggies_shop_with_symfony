@@ -1,23 +1,25 @@
 {% set product = item.product %}
 {% set subtotal = (item.price * item.quantity)|number_format(2, '.', '') %}
 
-<tr>
-    <td>
-        <img src="{{ asset(product.image) }}" alt="{{ product.name }}" width="60" height="60">
-        <a href="{{ path('app_shop_product', { id: product.id }) }}">{{ product.name }}</a>
+<tr class="hover:bg-gray-50 transition-colors">
+    <td class="px-4 py-3">
+        <div class="flex items-center space-x-3">
+            <img src="{{ asset(product.image) }}" alt="{{ product.name }}" width="60" height="60" class="rounded-lg object-cover w-16 h-16">
+            <a href="{{ path('app_shop_product', { id: product.id }) }}" class="text-brand-600 hover:text-brand-800 font-medium">{{ product.name }}</a>
+        </div>
     </td>
-    <td>{{ item.price|format_currency('EUR') }}</td>
-    <td>
-        <form method="post" action="{{ path('app_cart_update', { id: item.id }) }}" class="cart-quantity-form">
+    <td class="px-4 py-3 text-gray-700">{{ item.price|format_currency('EUR') }}</td>
+    <td class="px-4 py-3">
+        <form method="post" action="{{ path('app_cart_update', { id: item.id }) }}" class="cart-quantity-form flex items-center space-x-2">
             <input type="hidden" name="update_cart_item[_token]" value="{{ csrf_token('update_cart_item') }}">
-            <input type="number" name="update_cart_item[quantity]" value="{{ item.quantity }}" min="0" class="cart-quantity-input">
-            <button type="submit" class="btn btn-sm">OK</button>
+            <input type="number" name="update_cart_item[quantity]" value="{{ item.quantity }}" min="0" class="cart-quantity-input w-16 px-2 py-1 border border-gray-300 rounded-lg text-center focus:ring-brand-500 focus:border-brand-500">
+            <button type="submit" class="btn btn-sm px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm">OK</button>
         </form>
     </td>
-    <td>{{ subtotal|format_currency('EUR') }}</td>
-    <td>
+    <td class="px-4 py-3 font-semibold text-gray-800">{{ subtotal|format_currency('EUR') }}</td>
+    <td class="px-4 py-3">
         <form method="post" action="{{ path('app_cart_remove', { id: item.id }) }}">
-            <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+            <button type="submit" class="btn btn-sm btn-danger px-3 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm">Supprimer</button>
         </form>
     </td>
 </tr>
