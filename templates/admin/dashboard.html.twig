@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard - Administration{% endblock %}
+
+{% block body %}
+    <h1>Dashboard Administration</h1>
+
+    <div class="admin-cards">
+        <div class="admin-card">
+            <h2><a href="{{ path('app_admin_orders') }}">Commandes</a></h2>
+            <p>Gérer les commandes clients</p>
+        </div>
+
+        <div class="admin-card">
+            <h2><a href="{{ path('app_admin_users') }}">Utilisateurs</a></h2>
+            <p>Gérer les comptes utilisateurs</p>
+        </div>
+
+        <div class="admin-card">
+            <h2><a href="{{ path('app_admin_categories') }}">Catégories</a></h2>
+            <p>Gérer les catégories de produits</p>
+        </div>
+
+        <div class="admin-card">
+            <h2><a href="{{ path('app_admin_products') }}">Produits</a></h2>
+            <p>Gérer les produits du catalogue</p>
+        </div>
+    </div>
+{% endblock %}

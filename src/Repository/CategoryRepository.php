@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -29,5 +30,14 @@ class CategoryRepository extends ServiceEntityRepository
             ->orderBy('c.name', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Retourne un QueryBuilder pour la pagination des catégories.
+     */
+    public function createPaginatedQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.name', 'ASC');
     }
 }

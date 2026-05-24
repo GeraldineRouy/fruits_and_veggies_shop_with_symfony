@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.id ? 'Modifier' : 'Nouveau' }} produit - Administration{% endblock %}
+
+{% block body %}
+    <h1>{{ product.id ? 'Modifier le produit' : 'Nouveau produit' }}</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.price) }}
+        {{ form_row(form.image) }}
+        {{ form_row(form.categories) }}
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{{ path('app_admin_products') }}" class="btn btn-link">Annuler</a>
+    {{ form_end(form) }}
+{% endblock %}

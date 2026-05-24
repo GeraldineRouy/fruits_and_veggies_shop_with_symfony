@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des catégories - Administration{% endblock %}
+
+{% block body %}
+    <h1>Gestion des catégories</h1>
+
+    <a href="{{ path('app_admin_category_new') }}" class="btn btn-primary">Nouvelle catégorie</a>
+
+    {% if pagination.items|length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in pagination.items %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.description }}</td>
+                        <td>
+                            <a href="{{ path('app_admin_category_edit', {id: category.id}) }}">Modifier</a>
+                            <form method="post" action="{{ path('app_admin_category_delete', {id: category.id}) }}" style="display:inline" onsubmit="return confirm('Supprimer la catégorie « {{ category.name }} » ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-category-' ~ category.id) }}">
+                                <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            {% if pagination.hasPrevious %}
+                <a href="{{ path('app_admin_categories', {page: pagination.currentPage - 1}) }}">← Précédente</a>
+            {% endif %}
+
+            <span>Page {{ pagination.currentPage }} / {{ pagination.totalPages }}</span>
+
+            {% if pagination.hasNext %}
+                <a href="{{ path('app_admin_categories', {page: pagination.currentPage + 1}) }}">Suivante →</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Aucune catégorie pour le moment.</p>
+    {% endif %}
+{% endblock %}

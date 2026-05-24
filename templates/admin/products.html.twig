@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des produits - Administration{% endblock %}
+
+{% block body %}
+    <h1>Gestion des produits</h1>
+
+    <a href="{{ path('app_admin_product_new') }}" class="btn btn-primary">Nouveau produit</a>
+
+    {% if pagination.items|length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Catégories</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in pagination.items %}
+                    <tr>
+                        <td>
+                            <img src="{{ asset(product.image) }}" alt="{{ product.name }}" style="width:50px;height:50px;object-fit:cover;">
+                        </td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price|format_currency('EUR') }}</td>
+                        <td>
+                            {% for category in product.categories %}
+                                <span class="badge">{{ category.name }}{{ not loop.last ? ',' }}</span>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href="{{ path('app_admin_product_edit', {id: product.id}) }}">Modifier</a>
+                            <form method="post" action="{{ path('app_admin_product_delete', {id: product.id}) }}" style="display:inline" onsubmit="return confirm('Supprimer le produit « {{ product.name }} » ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-product-' ~ product.id) }}">
+                                <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            {% if pagination.hasPrevious %}
+                <a href="{{ path('app_admin_products', {page: pagination.currentPage - 1}) }}">← Précédente</a>
+            {% endif %}
+
+            <span>Page {{ pagination.currentPage }} / {{ pagination.totalPages }}</span>
+
+            {% if pagination.hasNext %}
+                <a href="{{ path('app_admin_products', {page: pagination.currentPage + 1}) }}">Suivante →</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Aucun produit pour le moment.</p>
+    {% endif %}
+{% endblock %}
