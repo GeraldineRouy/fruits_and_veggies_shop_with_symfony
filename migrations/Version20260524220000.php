@@ -30,7 +30,7 @@ final class Version20260524220000 extends AbstractMigration
         $this->addSql("UPDATE product SET image = 'assets/images/products/concombres.png' WHERE id = 10 AND image IS DISTINCT FROM 'assets/images/products/concombres.png'");
         $this->addSql("UPDATE product SET image = 'assets/images/products/courgettes.png' WHERE id = 11 AND image IS DISTINCT FROM 'assets/images/products/courgettes.png'");
         $this->addSql("UPDATE product SET image = 'assets/images/products/basilic.png' WHERE id = 12 AND image IS DISTINCT FROM 'assets/images/products/basilic.png'");
-        $this->addSql("UPDATE product SET image = 'assets/images/products/menthe.png' WHERE id = 13 AND image IS DISTINCT FROM 'assets/images/products/menthe.png'");
+        $this->addSql("UPDATE product SET image = 'assets/images/products/persil.png' WHERE id = 13 AND image IS DISTINCT FROM 'assets/images/products/persil.png'");
         $this->addSql("UPDATE product SET image = NULL WHERE id = 14");
         $this->addSql("UPDATE product SET image = 'assets/images/products/ananas.png' WHERE id = 15 AND image IS DISTINCT FROM 'assets/images/products/ananas.png'");
         $this->addSql("UPDATE product SET image = 'assets/images/products/noix-grenoble.png' WHERE id = 16 AND image IS DISTINCT FROM 'assets/images/products/noix-grenoble.png'");

@@ -9,6 +9,7 @@ use App\Repository\OrderRepository;
 use App\Service\CartService;
 use App\Service\OrderService;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -105,7 +106,7 @@ class OrderController extends AbstractController
     }
 
     #[Route('/commande/paiement', name: 'app_order_payment_process', methods: ['POST'])]
-    public function processPayment(CartService $cartService): Response
+    public function processPayment(CartService $cartService, LoggerInterface $logger): Response
     {
         try {
             $order = $cartService->cartToOrder($this->getUser());
@@ -114,9 +115,15 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('app_order_confirmation', ['id' => $order->getId()]);
         } catch (InvalidArgumentException $e) {
             $this->addFlash('error', $e->getMessage());
-
-            return $this->redirectToRoute('app_cart_index');
+        } catch (\Throwable $e) {
+            $logger->error('Erreur lors du paiement', [
+                'exception' => $e,
+                'user_id' => $this->getUser()?->getId(),
+            ]);
+            $this->addFlash('error', 'Une erreur est survenue lors du paiement. Veuillez réessayer.');
         }
+
+        return $this->redirectToRoute('app_cart_index');
     }
 
     #[Route('/commande/confirmation/{id}', name: 'app_order_confirmation', methods: ['GET'])]

@@ -34,6 +34,12 @@ Une commande peut être annulée depuis n'importe quel statut (par un admin) ou 
 - **Client** : peut annuler uniquement si le statut est `confirmed`
 - **Admin** : peut annuler une commande quel que soit son statut, sauf si déjà `cancelled`
 
+## Gestion des erreurs de paiement
+
+En cas d'erreur lors du paiement (ex : conflit de base de données, erreur inattendue), un message explicite est affiché à l'utilisateur : *"Une erreur est survenue lors du paiement. Veuillez réessayer."*
+
+L'utilisateur est redirigé vers la page panier et peut tenter à nouveau le paiement. L'erreur est automatiquement loguée pour diagnostic côté administrateur.
+
 ## Emails envoyés
 
 - **Confirmation** : envoyé après la création de la commande
