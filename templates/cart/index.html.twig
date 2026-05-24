@@ -27,9 +27,7 @@
             <div class="cart-summary p-6 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <p class="cart-total text-xl font-bold text-gray-800">Total : <span class="text-brand-600">{{ total|format_currency('EUR') }}</span></p>
                 <div class="flex space-x-3">
-                    <form method="post" action="{{ path('app_order_checkout') }}">
-                        <button type="submit" class="btn btn-success bg-brand-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-brand-700 transition-colors">Valider la commande</button>
-                    </form>
+                    <a href="{{ path('app_order_payment') }}" class="btn inline-block bg-brand-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-brand-700 transition-colors">Valider la commande</a>
                     <form method="post" action="{{ path('app_cart_clear') }}" onsubmit="return confirm('Vider le panier ?');">
                         <button type="submit" class="btn btn-danger bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors">Vider le panier</button>
                     </form>

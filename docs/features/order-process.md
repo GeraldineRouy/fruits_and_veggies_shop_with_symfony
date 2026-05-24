@@ -4,9 +4,12 @@
 
 1. Le client connecté ajoute des produits à son panier (`/panier`)
 2. Depuis la page panier, il clique sur **"Valider la commande"**
-3. La commande est créée avec le statut `confirmed`
-4. Un email de confirmation est envoyé automatiquement
-5. Le client est redirigé vers la page de détail de sa commande
+3. La page de paiement simulé s'affiche (`/commande/paiement`) avec les champs pré-remplis
+4. Le client clique sur **"Payer"** (pas de saisie nécessaire)
+5. La commande est créée avec le statut `confirmed`
+6. Un email de confirmation est envoyé automatiquement
+7. Le client est redirigé vers la page de confirmation (`/commande/confirmation/{id}`)
+8. Depuis la confirmation, le client peut retourner à l'accueil ou voir ses commandes
 
 ## Statuts d'une commande
 

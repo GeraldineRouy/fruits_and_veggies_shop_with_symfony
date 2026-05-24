@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Order;
-use App\Entity\User;
 use App\Repository\OrderRepository;
 use App\Service\CartService;
 use App\Service\OrderService;
@@ -88,24 +87,48 @@ class OrderController extends AbstractController
         return $this->redirectToRoute('app_order_detail', ['id' => $order->getId()]);
     }
 
-    #[Route('/commande/valider', name: 'app_order_checkout', methods: ['POST'])]
-    public function checkout(CartService $cartService): Response
+    #[Route('/commande/paiement', name: 'app_order_payment', methods: ['GET'])]
+    public function payment(CartService $cartService): Response
     {
         $user = $this->getUser();
+        $items = $cartService->getItems($user);
 
-        if (!$user instanceof User) {
-            throw $this->createAccessDeniedException();
+        if (empty($items)) {
+            $this->addFlash('error', 'Votre panier est vide.');
+            return $this->redirectToRoute('app_cart_index');
         }
 
-        try {
-            $order = $cartService->cartToOrder($user);
-            $this->addFlash('success', 'Votre commande a été créée avec succès.');
+        return $this->render('checkout/payment.html.twig', [
+            'productCount' => $cartService->getProductCount($user),
+            'total' => $cartService->getTotal($user),
+        ]);
+    }
 
-            return $this->redirectToRoute('app_order_detail', ['id' => $order->getId()]);
+    #[Route('/commande/paiement', name: 'app_order_payment_process', methods: ['POST'])]
+    public function processPayment(CartService $cartService): Response
+    {
+        try {
+            $order = $cartService->cartToOrder($this->getUser());
+            $this->addFlash('success', 'Votre commande a été confirmée. Un email de confirmation vous a été envoyé.');
+
+            return $this->redirectToRoute('app_order_confirmation', ['id' => $order->getId()]);
         } catch (InvalidArgumentException $e) {
             $this->addFlash('error', $e->getMessage());
 
             return $this->redirectToRoute('app_cart_index');
         }
+    }
+
+    #[Route('/commande/confirmation/{id}', name: 'app_order_confirmation', methods: ['GET'])]
+    public function confirmation(Order $order, OrderService $orderService): Response
+    {
+        if ($order->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Cette commande ne vous appartient pas.');
+        }
+
+        return $this->render('checkout/confirmation.html.twig', [
+            'order' => $order,
+            'total' => $orderService->getOrderTotal($order),
+        ]);
     }
 }
