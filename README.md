@@ -380,6 +380,76 @@ Les produits sont vendus selon différentes unités d'achat, précisées dans le
 | `bin/console app:users:purge-unverified --dry-run` | Simule la suppression sans modifier la base |
 | `bin/console app:orders:list-stalled` | Liste les commandes non livrées depuis plus de 7 jours |
 
+## Tests manuels
+
+### Purge des utilisateurs inactifs (2 ans)
+
+1. Édite le fichier `test-update-last-login.sql` à la racine du projet en remplaçant l'email :
+```sql
+UPDATE "user" SET last_login_at = '2023-01-01 00:00:00' WHERE email = 'user@example.com';
+```
+
+2. Exécute la mise à jour :
+```bash
+php bin/console dbal:run-sql "$(cat test-update-last-login.sql)"
+```
+
+3. Vérifie que l'utilisateur est détecté (dry-run) :
+```bash
+php bin/console app:users:purge-inactive --dry-run
+```
+
+4. Procède à la suppression :
+```bash
+php bin/console app:users:purge-inactive
+```
+
+### Purge des utilisateurs non vérifiés (7 jours)
+
+1. Édite le fichier `test-update-unverified.sql` à la racine du projet en remplaçant l'email :
+```sql
+UPDATE "user" SET verified_at = NULL, created_at = '2026-01-15 00:00:00' WHERE email = 'user@example.com';
+```
+
+2. Exécute la mise à jour :
+```bash
+php bin/console dbal:run-sql "$(cat test-update-unverified.sql)"
+```
+
+3. Vérifie que l'utilisateur est détecté (dry-run) :
+```bash
+php bin/console app:users:purge-unverified --dry-run
+```
+
+4. Procède à la suppression :
+```bash
+php bin/console app:users:purge-unverified
+```
+
+### Commandes bloquées (non livrées après 7 jours)
+
+1. Trouve une commande existante :
+```bash
+php bin/console dbal:run-sql "SELECT id, status, ordered_at FROM ""order"" LIMIT 5"
+```
+
+2. Édite le fichier `test-update-stalled-order.sql` en remplaçant l'ID et le statut (valeurs : `confirmed`, `preparing`, `shipped`) :
+```sql
+UPDATE "order" SET status = 'shipped', ordered_at = '2026-01-15 00:00:00' WHERE id = 1;
+```
+
+3. Exécute la mise à jour :
+```bash
+php bin/console dbal:run-sql "$(cat test-update-stalled-order.sql)"
+```
+
+4. Vérifie la liste :
+```bash
+php bin/console app:orders:list-stalled
+```
+
+> Les fichiers SQL de référence se trouvent à la racine du projet : `test-update-last-login.sql`, `test-update-unverified.sql`, `test-update-stalled-order.sql`.
+
 ## Inscription et connexion
 
 | Route | Description |
